@@ -156,7 +156,6 @@ const Insert = styled.button`
 `
 
 function UpdateLInfo (props) {
-    console.log(props.lt);
     const [type, setType] = useState("search");
     const [input, setInput] = useState({
         lnum: "", name: "", class: "", year: "", semester: "",
