@@ -71,6 +71,7 @@ function Calendar (props) {
                     props.getBirth(date);
                 }
             }
+            disabled = {(props.type ==="view") ? true : false}
         />
       );
 };

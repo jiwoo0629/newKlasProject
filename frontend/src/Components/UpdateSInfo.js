@@ -125,7 +125,8 @@ const Insert = styled.button`
     border-radius:10px; border:2px solid gray;
 `
 
-function AddSInfo () {
+function UpdateSInfo () {
+    const [type, setType] = useState("search");
     const [input, setInput] = useState({
         sid: "", name: "", dep: "", grade: "", phone: "", email: "", addr: ""
     })
@@ -141,7 +142,26 @@ function AddSInfo () {
     const onSelect = (e) => {
         setSex(e.target.value)
     }
-    const onInsert = (e) => {
+    const [birth, setBirth] = useState(new Date());
+    const getBirth = (date) => {
+        setBirth(date);
+        console.log(date);
+    }
+    var btn_name;
+    if(type === "search") btn_name = "조회하기";
+    else if(type === "view") btn_name = "정보수정";
+    else btn_name = "정보저장";
+
+    const onSearch = () => {
+        //학번 이용해서 정보 조회
+        //있을 경우 정보 조회 화면 이동. 없을 경우 에러 메시지
+        setType("view");
+    }
+    const goUpdate = () => {
+        if(window.confirm("정보를 수정하시겠습니까?"))
+            setType("update");
+    }
+    const onUpdate = (e) => {
         if(sid === "") alert("학번을 입력하세요.")
         else if(sid.length !== 10 || isNaN(sid)) alert("잘못된 양식입니다. 학번을 다시 입력하세요.")
         else if(name === "") alert("이름을 입력하세요.")
@@ -151,43 +171,65 @@ function AddSInfo () {
         }
         else if(grade === "") alert("학년을 입력하세요.")
         else {
-            if(window.confirm("정보를 저장하시겠습니까?")) {
+            if(window.confirm("수정된 정보를 저장하시겠습니까?")) {
                 //정보저장 후 메인으로 이동
+                alert("정보가 수정되었습니다.")
+                setType("view");
             }
         }
     }
-    const [birth, setBirth] = useState(new Date());
-    const getBirth = (date) => {
-        setBirth(date);
-        console.log(date);
+
+    const diffPage = () => {
+        if(type === "search") {
+            return (
+                <div>
+                    <SIdLayer>학번: </SIdLayer>
+                    <SId name="sid" value={sid} placeholder="학번" onChange={onChange} />
+                    <NameLayer>이름: </NameLayer>
+                    <Name name="name" value={name} placeholder="이름" onChange={onChange} />
+                    <Insert onClick={onSearch}>{btn_name}</Insert>
+                </div>
+            );
+        }
+        else if(type === "view" || type === "update") {
+            const diffFunc = () => {
+                if(type === "view") goUpdate();
+                else onUpdate();
+            }
+            return (
+                <div>
+                    <SIdLayer>학번: </SIdLayer>
+                    <SId name="sid" value={sid} placeholder="학번" onChange={onChange} disabled={type==="view" ? true : false} />
+                    <NameLayer>이름: </NameLayer>
+                    <Name name="name" value={name} placeholder="이름" onChange={onChange} disabled={type==="view" ? true : false} />
+                    <DepLayer>학과: </DepLayer>
+                    <Dep name="dep" value={dep} placeholder="학과" onChange={onChange} disabled={type==="view" ? true : false} />
+                    <GradeLayer>학년: </GradeLayer>
+                    <Grade name="grade" value={grade} placeholder="학년" onChange={onChange} disabled={type==="view" ? true : false} />
+                    <SexLayer>성별: </SexLayer>
+                    <Sex name="sex" value={sex} onChange={onSelect} disabled={type==="view" ? true : false} >
+                        <option value="M" key="M">남</option>
+                        <option value="W" key="W">여</option>
+                    </Sex>
+                    <BirthLayer>생일: </BirthLayer>
+                    <Birth><Calendar getBirth={getBirth} type={type} /></Birth>
+                    <PhoneLayer>연락처(선택): </PhoneLayer>
+                    <Phone name="phone" value={phone} placeholder="연락처 (xxx-xxxx-xxxx 꼴로 입력해주세요)" onChange={onChange} disabled={type==="view" ? true : false} />
+                    <EmailLayer>이메일(선택): </EmailLayer>
+                    <Email name="email" value={email} placeholder="이메일" onChange={onChange} disabled={type==="view" ? true : false} />
+                    <AddrLayer>주소(선택): </AddrLayer>
+                    <Addr name="addr" value={addr} placeholder="주소" onChange={onChange} disabled={type==="view" ? true : false} />
+                    <Insert onClick={diffFunc}>{btn_name}</Insert>
+                </div>
+            );
+        }
     }
 
     return (
         <div>
-            <SIdLayer>학번: </SIdLayer>
-            <SId name="sid" value={sid} placeholder="학번" onChange={onChange} />
-            <NameLayer>이름: </NameLayer>
-            <Name name="name" value={name} placeholder="이름" onChange={onChange} />
-            <DepLayer>학과: </DepLayer>
-            <Dep name="dep" value={dep} placeholder="학과" onChange={onChange} />
-            <GradeLayer>학년: </GradeLayer>
-            <Grade name="grade" value={grade} placeholder="학년" onChange={onChange} />
-            <SexLayer>성별: </SexLayer>
-            <Sex name="sex" value={sex} onChange={onSelect}>
-                <option value="M" key="M">남</option>
-                <option value="W" key="W">여</option>
-            </Sex>
-            <BirthLayer>생일: </BirthLayer>
-            <Birth><Calendar getBirth={getBirth} /></Birth>
-            <PhoneLayer>연락처(선택): </PhoneLayer>
-            <Phone name="phone" value={phone} placeholder="연락처 (xxx-xxxx-xxxx 꼴로 입력해주세요)" onChange={onChange} />
-            <EmailLayer>이메일(선택): </EmailLayer>
-            <Email name="email" value={email} placeholder="이메일" onChange={onChange} />
-            <AddrLayer>주소(선택): </AddrLayer>
-            <Addr name="addr" value={addr} placeholder="주소" onChange={onChange} />
-            <Insert onClick={onInsert}>정보저장</Insert>
+            {diffPage()}
         </div>
     );
 }
 
-export default AddSInfo;
+export default UpdateSInfo;

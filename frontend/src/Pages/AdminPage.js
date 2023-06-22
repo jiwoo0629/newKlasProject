@@ -3,6 +3,9 @@ import styled from 'styled-components';
 import AddSInfo from '../Components/AddSInfo';
 import AddPInfo from '../Components/AddPInfo';
 import AddLInfo from '../Components/AddLInfo';
+import UpdateSInfo from '../Components/UpdateSInfo';
+import UpdatePInfo from '../Components/UpdatePInfo';
+import UpdateLInfo from '../Components/UpdateLInfo';
 
 const Button1 = styled.button`
     position: absolute; left:25%; top: 100px;
@@ -35,7 +38,7 @@ const TitleContainer = styled.div`
 
 const GoBack = styled.button`
     position: absolute; left:600px;
-    top: ${props => props.lecture ? '1150px' : '750px'};
+    top: ${props => (props.lecture && props.lt !== "search") ? '1150px' : '750px'};
     width:100px; height:50px;
     font-size:20px; font-weight:600; color:gray;
     border-radius:10px; border:2px solid gray;
@@ -43,7 +46,7 @@ const GoBack = styled.button`
 
 const GoMain = styled.button`
     position: absolute; left:1000px;
-    top: ${props => props.lecture ? '1150px' : '750px'};
+    top: ${props => (props.lecture && props.lt !== "search") ? '1150px' : '750px'};
     width:100px; height:50px;
     font-size:20px; font-weight:600; color:gray;
     border-radius:10px; border:2px solid gray;
@@ -52,7 +55,7 @@ const GoMain = styled.button`
 var stack = ["main"];
 var top = 0;
 
-export default function AdminPage() {
+function AdminPage() {
     const [type, setType] = useState("main");
     const onChangePage = (e) => {
         stack.push(e.target.value);
@@ -63,14 +66,21 @@ export default function AdminPage() {
         stack.pop();
         top--;
         setType(stack[top]);
+        setLt("search");
     }
     const goMain = () => {
         while(top > 0) {
             stack.pop();
             top--;
         }
-        setType(stack[top])
+        setType(stack[top]);
+        setLt("search");
     }
+    const [lt, setLt] = useState("search");
+    const getLt = (t) => {
+        setLt(t);
+    }
+
     const diffPage = (type) => {
         if(type === "main") {
             return (
@@ -85,7 +95,7 @@ export default function AdminPage() {
             return (
                 <div>
                     <Button1 value="addStudentInfo" onClick={onChangePage}>학생정보 추가</Button1>
-                    <Button2 value="ChangeStudentInfo" onClick={onChangePage}>학생정보 조회 및 변경</Button2>
+                    <Button2 value="changeStudentInfo" onClick={onChangePage}>학생정보 조회 및 변경</Button2>
                     <GoBack onClick = {goBack}>뒤로가기</GoBack>
                     <GoMain onClick = {goMain}>메인으로</GoMain>
                 </div>
@@ -95,7 +105,7 @@ export default function AdminPage() {
             return (
                 <div>
                     <Button1 value="addProfessorInfo" onClick={onChangePage}>교수정보 추가</Button1>
-                    <Button2 value="ChangeProfessorInfo" onClick={onChangePage}>교수정보 조회 및 변경</Button2>
+                    <Button2 value="changeProfessorInfo" onClick={onChangePage}>교수정보 조회 및 변경</Button2>
                     <GoBack onClick = {goBack}>뒤로가기</GoBack>
                     <GoMain onClick = {goMain}>메인으로</GoMain>
                 </div>
@@ -111,33 +121,48 @@ export default function AdminPage() {
                 </div>
             );
         }
-        else if(type === "addStudentInfo") {
+        else if(type === "addStudentInfo" || type === "changeStudentInfo") {
+            const title = (type === "addStudentInfo") ? "학생정보 추가" : "학생정보 조회 및 변경";
+            const diffFunc = () => {
+                if(type === "addStudentInfo") return <AddSInfo />;
+                else return <UpdateSInfo />;
+            }
             return (
                 <div>
-                    <TitleContainer>학생정보 추가</TitleContainer>
+                    <TitleContainer>{title}</TitleContainer>
                     <GoBack onClick = {goBack}>뒤로가기</GoBack>
-                    <AddSInfo />
+                    {diffFunc()}
                     <GoMain onClick = {goMain}>메인으로</GoMain>
                 </div>
             );
         }
-        else if(type === "addProfessorInfo") {
+        else if(type === "addProfessorInfo" || type === "changeProfessorInfo") {
+            const title = (type === "addProfessorInfo") ? "교수정보 추가" : "교수정보 조회 및 변경";
+            const diffFunc = () => {
+                if(type === "addProfessorInfo") return <AddPInfo />;
+                else return <UpdatePInfo />;
+            }
             return (
                 <div>
-                    <TitleContainer>교수정보 추가</TitleContainer>
+                    <TitleContainer>{title}</TitleContainer>
                     <GoBack onClick = {goBack}>뒤로가기</GoBack>
-                    <AddPInfo />
+                    {diffFunc()}
                     <GoMain onClick = {goMain}>메인으로</GoMain>
                 </div>
             );
         }
-        else if(type === "addLectureInfo") {
+        else if(type === "addLectureInfo" || type === "changeLectureInfo") {
+            const title = (type === "addLectureInfo") ? "강의정보 추가" : "강의정보 조회 및 변경";
+            const diffFunc = () => {
+                if(type === "addLectureInfo") return <AddLInfo getLt={getLt} />;
+                else return <UpdateLInfo getLt={getLt} />;
+            }
             return (
                 <div>
-                    <TitleContainer>강의정보 추가</TitleContainer>
-                    <GoBack lecture onClick = {goBack}>뒤로가기</GoBack>
-                    <AddLInfo />
-                    <GoMain lecture onClick = {goMain}>메인으로</GoMain>
+                    <TitleContainer>{title}</TitleContainer>
+                    {diffFunc()}
+                    <GoBack lecture lt={lt} onClick={goBack}>뒤로가기</GoBack>
+                    <GoMain lecture lt={lt} onClick={goMain}>메인으로</GoMain>
                 </div>
             );
         }
@@ -148,3 +173,5 @@ export default function AdminPage() {
         </div>
     );
 }
+
+export default AdminPage;

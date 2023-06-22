@@ -81,19 +81,19 @@ const LtimeLayer = styled.div`
     font-size:30px; font-weight:600;
     text-align: right;
 `
-const Ltime1_day = styled.select`
+const Ltime1_Day = styled.select`
     position: absolute; left:570px; top:500px;
     width:140px; height:40px; font-size:20px;
 `
-const Ltime1_time = styled.select`
+const Ltime1_Time = styled.select`
     position: absolute; left:720px; top:500px;
     width:140px; height:40px; font-size:20px;
 `
-const Ltime2_day = styled.select`
+const Ltime2_Day = styled.select`
     position: absolute; left:890px; top:500px;
     width:140px; height:40px; font-size:20px;
 `
-const Ltime2_time = styled.select`
+const Ltime2_Time = styled.select`
     position: absolute; left:1040px; top:500px;
     width:140px; height:40px; font-size:20px;
 `
@@ -197,7 +197,7 @@ function AddLInfo () {
     }
     const onInsert = (e) => {
         if(lnum === "") alert("학정번호를 입력하세요.")
-        else if(lnum.length != 14) alert("잘못된 양식입니다. 학정번호를 다시 입력하세요.");
+        else if(lnum.length !== 14) alert("잘못된 양식입니다. 학정번호를 다시 입력하세요.");
         else if(name === "") alert("교과목명을 입력하세요.")
         else if(classification === "") alert("이수구분을 입력하세요.")
         else if(year === "" || semester === "") alert("년도학기를 입력하세요")
@@ -235,7 +235,7 @@ function AddLInfo () {
             <PID name="pid" value={pid} placeholder="학번" onChange={onChange} />
             <Pname name="pname" value={pname} placeholder="이름" onChange={onChange} />
             <LtimeLayer>강의시간: </LtimeLayer>
-            <Ltime1_day name="ltime1_day" value={ltime1_day} placeholder="요일1" onChange={onSelect}>
+            <Ltime1_Day name="ltime1_day" value={ltime1_day} placeholder="요일1" onChange={onSelect}>
                 <option value="x">== 선 택 ==</option>
                 <option value="mo">월</option>
                 <option value="tu">화</option>
@@ -243,8 +243,8 @@ function AddLInfo () {
                 <option value="th">목</option>
                 <option value="fr">금</option>
                 <option value="sa">토</option>
-            </Ltime1_day>
-            <Ltime1_time name="ltime1_time" value={ltime1_time} placeholder="시간1" onChange={onSelect} ref={time1Ref} disabled>
+            </Ltime1_Day>
+            <Ltime1_Time name="ltime1_time" value={ltime1_time} placeholder="시간1" onChange={onSelect} ref={time1Ref} disabled>
                 <option value="">== 선 택 ==</option>
                 <option value="0">0교시</option>
                 <option value="1">1교시</option>
@@ -253,8 +253,8 @@ function AddLInfo () {
                 <option value="4">4교시</option>
                 <option value="5">5교시</option>
                 <option value="6">6교시</option>
-            </Ltime1_time>
-            <Ltime2_day name="ltime2_day" value={ltime2_day} placeholder="요일2" onChange={onSelect}>
+            </Ltime1_Time>
+            <Ltime2_Day name="ltime2_day" value={ltime2_day} placeholder="요일2" onChange={onSelect}>
                 <option value="x">== 선 택 ==</option>
                 <option value="no">해당없음</option>
                 <option value="mo">월</option>
@@ -263,8 +263,8 @@ function AddLInfo () {
                 <option value="th">목</option>
                 <option value="fr">금</option>
                 <option value="sa">토</option>
-            </Ltime2_day>
-            <Ltime2_time name="ltime2_time" value={ltime2_time} placeholder="시간2" onChange={onSelect} ref={time2Ref} disabled>
+            </Ltime2_Day>
+            <Ltime2_Time name="ltime2_time" value={ltime2_time} placeholder="시간2" onChange={onSelect} ref={time2Ref} disabled>
                 <option value="">== 선 택 ==</option>
                 <option value="0">0교시</option>
                 <option value="1">1교시</option>
@@ -273,7 +273,7 @@ function AddLInfo () {
                 <option value="4">4교시</option>
                 <option value="5">5교시</option>
                 <option value="6">6교시</option>
-            </Ltime2_time>
+            </Ltime2_Time>
             <LroomLayer>강의실: </LroomLayer>
             <Lroom name="lroom" value={lroom} placeholder="강의실" onChange={onChange} />
             <EnrollLayer>재적인원: </EnrollLayer>
