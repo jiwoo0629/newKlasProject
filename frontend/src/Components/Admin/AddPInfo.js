@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
-import Calendar from './Calendar';
+import Calendar from '../Calendar';
 
 const PIdLayer = styled.div`
     position: absolute; left:350px; top:200px;

@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
-import AddSInfo from '../Components/AddSInfo';
-import AddPInfo from '../Components/AddPInfo';
-import AddLInfo from '../Components/AddLInfo';
-import UpdateSInfo from '../Components/UpdateSInfo';
-import UpdatePInfo from '../Components/UpdatePInfo';
-import UpdateLInfo from '../Components/UpdateLInfo';
+import AddSInfo from '../Components/Admin/AddSInfo';
+import AddPInfo from '../Components/Admin/AddPInfo';
+import AddLInfo from '../Components/Admin/AddLInfo';
+import UpdateSInfo from '../Components/Admin/UpdateSInfo';
+import UpdatePInfo from '../Components/Admin/UpdatePInfo';
+import UpdateLInfo from '../Components/Admin/UpdateLInfo';
 
 const Button1 = styled.button`
     position: absolute; left:25%; top: 100px;
@@ -61,12 +61,13 @@ function AdminPage() {
         stack.push(e.target.value);
         top++;
         setType(stack[top]);
+        if(e.target.value === "changeLectureInfo") setLt("search");
     }
     const goBack = () => {
         stack.pop();
         top--;
         setType(stack[top]);
-        setLt("search");
+        setLt("");
     }
     const goMain = () => {
         while(top > 0) {
@@ -74,9 +75,9 @@ function AdminPage() {
             top--;
         }
         setType(stack[top]);
-        setLt("search");
+        setLt("");
     }
-    const [lt, setLt] = useState("search");
+    const [lt, setLt] = useState("");
     const getLt = (t) => {
         setLt(t);
     }
