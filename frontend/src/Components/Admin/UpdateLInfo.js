@@ -1,5 +1,6 @@
 import React, {useState, useRef} from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
 const Container = styled.div`
     width:100%; height: 1250px;
@@ -158,10 +159,10 @@ const Insert = styled.button`
 function UpdateLInfo (props) {
     const [type, setType] = useState("search");
     const [input, setInput] = useState({
-        lnum: "", name: "", class: "", year: "", semester: "",
+        lnum: "", name: "", lyear: "", lsemester: "",
         pid: "", pname: "", lroom: "", enroll: "", linfo: "", obj_method: ""
     })
-    const {lnum, name, year, semester, pid, pname, lroom, enroll, linfo, obj_method} = input;
+    const {lnum, name, lyear, lsemester, pid, pname, lroom, enroll, linfo, obj_method} = input;
     const onChange = (e) => {
         const {name, value} = e.target;
         setInput ({
@@ -169,20 +170,20 @@ function UpdateLInfo (props) {
             [name]: value
         })
     }
+    const [classification, setClassification] = useState("none");
     const [select, setSelect] = useState({
-        classification: "none",
-        ltime1_day: "x", ltime1_time: "", ltime2_day: "x", ltime2_time: ""
+        lt1_day: "x", lt1_time: "", lt2_day: "x", lt2_time: ""
     })
-    const {classification, ltime1_day, ltime1_time, ltime2_day, ltime2_time} = select;
+    const {lt1_day, lt1_time, lt2_day, lt2_time} = select;
     const time1Ref = useRef(null);
     const time2Ref = useRef(null);
     function handleFocus(name) {
-        var Ref = (name === "ltime1_day") ? time1Ref : time2Ref;
+        var Ref = (name === "lt1_day") ? time1Ref : time2Ref;
         Ref.current.disabled = false;
         Ref.current.focus();
     }
     function handleReset(name) {
-        var Ref = (name === "ltime1_day") ? time1Ref : time2Ref;
+        var Ref = (name === "lt1_day") ? time1Ref : time2Ref;
         Ref.current.disabled = true;
         Ref.current.value = "";
     }
@@ -192,7 +193,7 @@ function UpdateLInfo (props) {
             ...select,
             [name]: value
         })
-        if(name === "ltime1_day" || name === "ltime2_day") {
+        if(name === "lt1_day" || name === "lt2_day") {
             if(value === "no" || value === "x") handleReset(name);
             else handleFocus(name);
         }
@@ -202,11 +203,31 @@ function UpdateLInfo (props) {
     else if(type === "view") btn_name = "정보수정";
     else btn_name = "정보저장";
 
+    function getLecture() {
+        return axios.get("http://localhost:9000/lecture/get", {
+            params: {lnum: lnum, name: name}
+        })
+    }
+    function getLectureTime() {
+        return axios.get("http://localhost:9000/lecture/getTime", {
+            params: {lnum: lnum}
+        })
+    }
     const onSearch = () => {
         //학번 이용해서 정보 조회
         //있을 경우 정보 조회 화면 이동. 없을 경우 에러 메시지
-        setType("view")
-        props.getLt("view")
+        axios.all([getLecture(), getLectureTime()])
+        .then(axios.spread((res1, res2) => {
+            setInput(res1.data);
+            setSelect(res2.data);
+            setClassification(res1.data.classification);
+            setType("view")
+            props.getLt("view")
+        }))
+        .catch((error) => {
+            console.log(error);
+            alert("존재하지 않는 강의입니다.")
+        })
     }
     const goUpdate = () => {
         if(window.confirm("정보를 수정하시겠습니까?")) {
@@ -218,22 +239,50 @@ function UpdateLInfo (props) {
         if(lnum === "") alert("학정번호를 입력하세요.")
         else if(lnum.length !== 14) alert("잘못된 양식입니다. 학정번호를 다시 입력하세요.");
         else if(name === "") alert("교과목명을 입력하세요.")
-        else if(classification === "") alert("이수구분을 입력하세요.")
-        else if(year === "" || semester === "") alert("년도학기를 입력하세요")
+        else if(lyear === "" || lsemester === "") alert("년도학기를 입력하세요")
         else if(isNaN(pid)) alert("잘못된 양식입니다. 학번을 다시 입력하세요.")
         else if(pname === "") alert("교수명을 입력하세요.")
         //pid와 pname이 가리키는 사람이 같은지 확인
-        else if(ltime1_day === "x" || ltime1_time === "") alert("강의시간을 입력하세요.")
+        else if(lt1_day === "x" || lt1_time === "") alert("강의시간을 입력하세요.")
         else if(lroom === "") alert("강의실을 입력하세요.")
         else if(enroll === "") alert("재적인원을 입력하세요.")
         else {
             if(window.confirm("정보를 저장하시겠습니까?")) {
-                //정보저장 후 메인으로 이동
-                alert("정보가 저장되었습니다")
-                handleReset("ltime1_day");
-                handleReset("ltime2_day");
-                setType("view");
-                props.getLt("view");
+                axios.post("http://localhost:9000/lecture/update", {
+                    lnum : lnum,
+                    name : name,
+                    classification : classification,
+                    lyear : parseInt(lyear),
+                    lsemester : parseInt(lsemester),
+                    lroom : lroom,
+                    pid : pid,
+                    pname : pname,
+                    enroll : parseInt(enroll),
+                    linfo : linfo,
+                    obj_method : obj_method
+                })
+                .then((res) => {
+                    console.log(res);
+                })
+                .catch((error) => {console.log(error)});
+                axios.post("http://localhost:9000/lecture/updateTime", {
+                    lnum : lnum,
+                    lt1_day : lt1_day,
+                    lt1_time : parseInt(lt1_time),
+                    lt2_day : lt2_day,
+                    lt2_time : parseInt(lt2_time)
+                })
+                .then((res) => {
+                    //정보수정 후 메인으로 이동
+                    console.log(res);
+                    alert("정보가 수정되었습니다.");
+                    handleReset("ltime1_day");
+                    handleReset("ltime2_day");
+                    setType("view");
+                    props.getLt("view");
+
+                })
+                .catch((error) => {console.log(error)});
             }
         }
     }
@@ -273,7 +322,7 @@ function UpdateLInfo (props) {
                     />
                     <ClassLayer>이수구분: </ClassLayer>
                     <Class name="classification" value={classification} onChange={onSelect} disabled={type==="view" ? true : false}>
-                        <option value="none" >=== 선 택 ===</option>
+                        <option value="none">=== 선 택 ===</option>
                         <option value="MR" key = "MR">전필</option>
                         <option value="MS" key = "MS">전선</option>
                         <option value="LR" key = "LR">교필</option>
@@ -282,13 +331,13 @@ function UpdateLInfo (props) {
                         <option value="BS" key = "BS">기선</option>
                     </Class>
                     <YearSemesterLayer>년도학기: </YearSemesterLayer>
-                    <Year name="year" value={year} placeholder="년도" onChange={onChange} disabled={type==="view" ? true : false} />
-                    <Semester name="semester" value={semester} placeholder="학기" onChange={onChange} disabled={type==="view" ? true : false} />
+                    <Year name="lyear" value={lyear} placeholder="년도" onChange={onChange} disabled={type==="view" ? true : false} />
+                    <Semester name="lsemester" value={lsemester} placeholder="학기" onChange={onChange} disabled={type==="view" ? true : false} />
                     <ProfessorLayer>교수: </ProfessorLayer>
                     <PID name="pid" value={pid} placeholder="학번" onChange={onChange} disabled={type==="view" ? true : false} />
                     <Pname name="pname" value={pname} placeholder="이름" onChange={onChange} disabled={type==="view" ? true : false} />
                     <LtimeLayer>강의시간: </LtimeLayer>
-                    <Ltime1_Day name="ltime1_day" value={ltime1_day} placeholder="요일1" onChange={onSelect} disabled={type==="view" ? true : false}>
+                    <Ltime1_Day name="lt1_day" value={lt1_day} placeholder="요일1" onChange={onSelect} disabled={type==="view" ? true : false}>
                         <option value="x">== 선 택 ==</option>
                         <option value="mo">월</option>
                         <option value="tu">화</option>
@@ -297,7 +346,7 @@ function UpdateLInfo (props) {
                         <option value="fr">금</option>
                         <option value="sa">토</option>
                     </Ltime1_Day>
-                    <Ltime1_Time name="ltime1_time" value={ltime1_time} placeholder="시간1" onChange={onSelect} ref={time1Ref} disabled>
+                    <Ltime1_Time name="lt1_time" value={lt1_time} placeholder="시간1" onChange={onSelect} ref={time1Ref} disabled>
                         <option value="">== 선 택 ==</option>
                         <option value="0">0교시</option>
                         <option value="1">1교시</option>
@@ -307,7 +356,7 @@ function UpdateLInfo (props) {
                         <option value="5">5교시</option>
                         <option value="6">6교시</option>
                     </Ltime1_Time>
-                    <Ltime2_Day name="ltime2_day" value={ltime2_day} placeholder="요일2" onChange={onSelect} disabled={type==="view" ? true : false}>
+                    <Ltime2_Day name="lt2_day" value={lt2_day} placeholder="요일2" onChange={onSelect} disabled={type==="view" ? true : false}>
                         <option value="x">== 선 택 ==</option>
                         <option value="no">해당없음</option>
                         <option value="mo">월</option>
@@ -317,7 +366,7 @@ function UpdateLInfo (props) {
                         <option value="fr">금</option>
                         <option value="sa">토</option>
                     </Ltime2_Day>
-                    <Ltime2_Time name="ltime2_time" value={ltime2_time} placeholder="시간2" onChange={onSelect} ref={time2Ref} disabled>
+                    <Ltime2_Time name="lt2_time" value={lt2_time} placeholder="시간2" onChange={onSelect} ref={time2Ref} disabled>
                         <option value="">== 선 택 ==</option>
                         <option value="0">0교시</option>
                         <option value="1">1교시</option>

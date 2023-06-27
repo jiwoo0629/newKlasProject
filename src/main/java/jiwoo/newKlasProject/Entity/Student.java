@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jiwoo.newKlasProject.DTO.StudentDTO;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,7 +27,6 @@ public class Student {
     private int grade;
     @Column
     private char sex;
-
     @Column
     private LocalDate birth;
     @Column

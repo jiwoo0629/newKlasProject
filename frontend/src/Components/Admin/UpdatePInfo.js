@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import Calendar from '../Calendar';
 
 const PIdLayer = styled.div`
@@ -142,7 +143,20 @@ function UpdatePInfo () {
     const onSearch = () => {
         //학번 이용해서 정보 조회
         //있을 경우 정보 조회 화면 이동. 없을 경우 에러 메시지
-        setType("view");
+        axios.get("http://localhost:9000/professor/get", {
+            params: {pid: pid, name: name}
+        })
+        .then((res) => {
+            console.log(res);
+            setInput(res.data);
+            setSex(res.data.sex);
+            setBirth(res.data.birth);
+            setType("view")
+        })
+        .catch((error) => {
+            console.log(error);
+            alert("존재하지 않는 사용자입니다.")
+        });
     }
     const goUpdate = () => {
         if(window.confirm("정보를 수정하시겠습니까?"))
@@ -159,7 +173,22 @@ function UpdatePInfo () {
         else if(lab === "") alert("연구실을 입력하세요.")
         else {
             if(window.confirm("정보를 저장하시겠습니까?")) {
-                //정보저장 후 메인으로 이동
+                axios.post("http://localhost:9000/professor/update", {
+                    pid : pid,
+                    name : name,
+                    dep : dep,
+                    lab : lab,
+                    sex : sex,
+                    phone : phone,
+                    email : email,
+                    birth : birth
+                })
+                .then(() => {
+                    //정보저장 후 메인으로 이동
+                    alert("정보가 수정되었습니다.")
+                    setType("view");
+                })
+                .catch((error) => {console.log(error)})
             }
         }
     }
@@ -169,7 +198,7 @@ function UpdatePInfo () {
             return (
                 <div>
                     <PIdLayer>학번: </PIdLayer>
-                    <PId name="sid" value={pid} placeholder="학번" onChange={onChange} />
+                    <PId name="pid" value={pid} placeholder="학번" onChange={onChange} />
                     <NameLayer>이름: </NameLayer>
                     <Name name="name" value={name} placeholder="이름" onChange={onChange} />
                     <Insert onClick={onSearch}>{btn_name}</Insert>
@@ -197,7 +226,7 @@ function UpdatePInfo () {
                         <option value="W" key="W">여</option>
                     </Sex>
                     <BirthLayer>생일: </BirthLayer>
-                    <Birth><Calendar getBirth={getBirth} type={type} /></Birth>
+                    <Birth><Calendar date={birth} getBirth={getBirth} type={type} /></Birth>
                     <PhoneLayer>연락처(선택): </PhoneLayer>
                     <Phone name="phone" value={phone} placeholder="연락처 (xxx-xxxx-xxxx 꼴로 입력해주세요)" onChange={onChange} disabled={type==="view" ? true : false} />
                     <EmailLayer>이메일(선택): </EmailLayer>

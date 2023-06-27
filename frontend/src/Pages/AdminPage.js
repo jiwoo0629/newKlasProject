@@ -81,6 +81,9 @@ function AdminPage() {
     const getLt = (t) => {
         setLt(t);
     }
+    const getType = (t) => {
+        setType(t);
+    }
 
     const diffPage = (type) => {
         if(type === "main") {
@@ -125,7 +128,7 @@ function AdminPage() {
         else if(type === "addStudentInfo" || type === "changeStudentInfo") {
             const title = (type === "addStudentInfo") ? "학생정보 추가" : "학생정보 조회 및 변경";
             const diffFunc = () => {
-                if(type === "addStudentInfo") return <AddSInfo />;
+                if(type === "addStudentInfo") return <AddSInfo getType={getType}/>;
                 else return <UpdateSInfo />;
             }
             return (
@@ -140,7 +143,7 @@ function AdminPage() {
         else if(type === "addProfessorInfo" || type === "changeProfessorInfo") {
             const title = (type === "addProfessorInfo") ? "교수정보 추가" : "교수정보 조회 및 변경";
             const diffFunc = () => {
-                if(type === "addProfessorInfo") return <AddPInfo />;
+                if(type === "addProfessorInfo") return <AddPInfo getType={getType}/>;
                 else return <UpdatePInfo />;
             }
             return (
@@ -155,7 +158,7 @@ function AdminPage() {
         else if(type === "addLectureInfo" || type === "changeLectureInfo") {
             const title = (type === "addLectureInfo") ? "강의정보 추가" : "강의정보 조회 및 변경";
             const diffFunc = () => {
-                if(type === "addLectureInfo") return <AddLInfo getLt={getLt} />;
+                if(type === "addLectureInfo") return <AddLInfo getType={getType} getLt={getLt} />;
                 else return <UpdateLInfo getLt={getLt} />;
             }
             return (

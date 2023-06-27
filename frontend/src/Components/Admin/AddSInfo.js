@@ -126,7 +126,7 @@ const Insert = styled.button`
     border-radius:10px; border:2px solid gray;
 `
 
-function AddSInfo () {
+function AddSInfo (props) {
     const [input, setInput] = useState({
         sid: "", name: "", dep: "", grade: "", phone: "", email: "", addr: ""
     })
@@ -169,6 +169,7 @@ function AddSInfo () {
                     alert("저장이 완료되었습니다.");
                     console.log(res);
                     //메인으로 이동
+                    props.getType("main");
                 })
                 .catch((error) => {console.log(error)})
             }
