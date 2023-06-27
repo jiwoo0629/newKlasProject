@@ -13,8 +13,8 @@ import java.util.List;
 public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
     @Override
-    public Student getStudent(String sid) {
-        Student student = studentRepository.findBySid(sid)
+    public Student getStudent(String sid, String name) {
+        Student student = studentRepository.findBySidName(sid, name)
                 .orElseThrow(() -> new IllegalArgumentException("NO_DATA"));
         return student;
     }
@@ -27,7 +27,7 @@ public class StudentServiceImpl implements StudentService {
     }
     @Override
     public void enrollStudent(StudentDTO studentDTO) {
-        if(studentRepository.findByName(studentDTO.getName()).isPresent())
+        if(studentRepository.findBySid(studentDTO.getSid()).isPresent())
             throw new IllegalArgumentException("ALREADY_EXIST");
         Student student = Student.builder()
                 .sid(studentDTO.getSid())
@@ -45,7 +45,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void updateStudent(StudentDTO studentDTO) {
         Student student = studentRepository.findBySid(studentDTO.getSid())
-                .orElseThrow(() -> new IllegalArgumentException("NO_DATA"));;
+                .orElseThrow(() -> new IllegalArgumentException("NO_DATA"));
         student.update(studentDTO);
         studentRepository.save(student);
     }

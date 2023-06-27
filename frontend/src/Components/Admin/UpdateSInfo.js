@@ -154,8 +154,9 @@ function UpdateSInfo () {
 
     const onSearch = () => {
         //학번 이용해서 정보 조회
+        //있을 경우 정보 조회 화면 이동. 없을 경우 에러 메시지
         axios.get("http://localhost:9000/student/get", {
-            params: {sid: sid}
+            params: {sid: sid, name: name}
         })
         .then((res) => {
             console.log(res);
@@ -168,8 +169,6 @@ function UpdateSInfo () {
             console.log(error);
             alert("존재하지 않는 사용자입니다.")
         });
-
-        //있을 경우 정보 조회 화면 이동. 없을 경우 에러 메시지
     }
     const goUpdate = () => {
         if(window.confirm("정보를 수정하시겠습니까?")) {

@@ -1,4 +1,5 @@
 import React, {useState, useRef} from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -154,9 +155,9 @@ const Insert = styled.button`
     margin-bottom : 50px;
 `
 
-function AddLInfo () {
+function AddLInfo (props) {
     const [input, setInput] = useState({
-        lnum: "", name: "", class: "", year: "", semester: "",
+        lnum: "", name: "", year: "", semester: "",
         pid: "", pname: "", lroom: "", enroll: "", linfo: "", obj_method: ""
     })
     const {lnum, name, year, semester, pid, pname, lroom, enroll, linfo, obj_method} = input;
@@ -169,18 +170,18 @@ function AddLInfo () {
     }
     const [select, setSelect] = useState({
         classification: "none",
-        ltime1_day: "no", ltime1_time: "", ltime2_day: "no", ltime2_time: ""
+        lt1_day: "no", lt1_time: "", lt2_day: "no", lt2_time: ""
     })
-    const {classification, ltime1_day, ltime1_time, ltime2_day, ltime2_time} = select;
+    const {classification, lt1_day, lt1_time, lt2_day, lt2_time} = select;
     const time1Ref = useRef(null);
     const time2Ref = useRef(null);
     function handleFocus(name) {
-        var Ref = (name === "ltime1_day") ? time1Ref : time2Ref;
+        var Ref = (name === "lt1_day") ? time1Ref : time2Ref;
         Ref.current.disabled = false;
         Ref.current.focus();
     }
     function handleReset(name) {
-        var Ref = (name === "ltime1_day") ? time1Ref : time2Ref;
+        var Ref = (name === "lt1_day") ? time1Ref : time2Ref;
         Ref.current.disabled = true;
         Ref.current.value = "";
     }
@@ -190,11 +191,12 @@ function AddLInfo () {
             ...select,
             [name]: value
         })
-        if(name === "ltime1_day" || name === "ltime2_day") {
+        if(name === "lt1_day" || name === "lt2_day") {
             if(value === "no" || value === "x") handleReset(name);
             else handleFocus(name);
         }
     }
+
     const onInsert = (e) => {
         if(lnum === "") alert("학정번호를 입력하세요.")
         else if(lnum.length !== 14) alert("잘못된 양식입니다. 학정번호를 다시 입력하세요.");
@@ -208,6 +210,38 @@ function AddLInfo () {
         else {
             if(window.confirm("정보를 저장하시겠습니까?")) {
                 //정보저장 후 메인으로 이동
+                axios.post("http://localhost:9000/lecture/enroll", {
+                    lnum : lnum,
+                    name : name,
+                    classification : classification,
+                    lyear : parseInt(year),
+                    lsemester : parseInt(semester),
+                    lroom : lroom,
+                    pid : pid,
+                    pname : pname,
+                    enroll : parseInt(enroll),
+                    linfo : linfo,
+                    obj_method : obj_method
+                })
+                .then((res) => {
+                    console.log(res);
+                })
+                .catch((error) => {console.log(error)});
+                axios.post("http://localhost:9000/lecture/enrollTime", {
+                    lnum : lnum,
+                    lt1_day : lt1_day,
+                    lt1_time : parseInt(lt1_time),
+                    lt2_day : lt2_day,
+                    lt2_time : parseInt(lt2_time)
+                })
+                .then((res) => {
+                    alert("저장이 완료되었습니다.");
+                    console.log(res);
+                    //메인으로 이동
+                    props.getType("main");
+                })
+                .catch((error) => {console.log(error)});
+
             }
         }
     }
@@ -219,7 +253,7 @@ function AddLInfo () {
             <NameLayer>교과목명: </NameLayer>
             <Name name="name" value={name} placeholder="교과목명" onChange={onChange} />
             <ClassLayer>이수구분: </ClassLayer>
-            <Class name="class" value={classification} onChange={onSelect}>
+            <Class name="classification" value={classification} onChange={onSelect}>
                 <option value="none" >=== 선 택 ===</option>
                 <option value="MR" key = "MR">전필</option>
                 <option value="MS" key = "MS">전선</option>
@@ -235,7 +269,7 @@ function AddLInfo () {
             <PID name="pid" value={pid} placeholder="학번" onChange={onChange} />
             <Pname name="pname" value={pname} placeholder="이름" onChange={onChange} />
             <LtimeLayer>강의시간: </LtimeLayer>
-            <Ltime1_Day name="ltime1_day" value={ltime1_day} placeholder="요일1" onChange={onSelect}>
+            <Ltime1_Day name="lt1_day" value={lt1_day} placeholder="요일1" onChange={onSelect}>
                 <option value="x">== 선 택 ==</option>
                 <option value="mo">월</option>
                 <option value="tu">화</option>
@@ -244,7 +278,7 @@ function AddLInfo () {
                 <option value="fr">금</option>
                 <option value="sa">토</option>
             </Ltime1_Day>
-            <Ltime1_Time name="ltime1_time" value={ltime1_time} placeholder="시간1" onChange={onSelect} ref={time1Ref} disabled>
+            <Ltime1_Time name="lt1_time" value={lt1_time} placeholder="시간1" onChange={onSelect} ref={time1Ref} disabled>
                 <option value="">== 선 택 ==</option>
                 <option value="0">0교시</option>
                 <option value="1">1교시</option>
@@ -254,7 +288,7 @@ function AddLInfo () {
                 <option value="5">5교시</option>
                 <option value="6">6교시</option>
             </Ltime1_Time>
-            <Ltime2_Day name="ltime2_day" value={ltime2_day} placeholder="요일2" onChange={onSelect}>
+            <Ltime2_Day name="lt2_day" value={lt2_day} placeholder="요일2" onChange={onSelect}>
                 <option value="x">== 선 택 ==</option>
                 <option value="no">해당없음</option>
                 <option value="mo">월</option>
@@ -264,7 +298,7 @@ function AddLInfo () {
                 <option value="fr">금</option>
                 <option value="sa">토</option>
             </Ltime2_Day>
-            <Ltime2_Time name="ltime2_time" value={ltime2_time} placeholder="시간2" onChange={onSelect} ref={time2Ref} disabled>
+            <Ltime2_Time name="lt2_time" value={lt2_time} placeholder="시간2" onChange={onSelect} ref={time2Ref} disabled>
                 <option value="">== 선 택 ==</option>
                 <option value="0">0교시</option>
                 <option value="1">1교시</option>

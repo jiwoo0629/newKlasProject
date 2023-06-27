@@ -8,15 +8,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/student")
 public class StudentController {
     private final StudentService studentService;
     @GetMapping("/get")
-    public ResponseEntity<Student> getStudent(@RequestParam("sid") String sid) {
-        Student student = studentService.getStudent(sid);
+    public ResponseEntity<Student> getStudent(@RequestParam("sid") String sid, @RequestParam("name") String name) {
+        Student student = studentService.getStudent(sid, name);
         return ResponseEntity.ok().body(student);
+    }
+    @GetMapping("/getAll")
+    public ResponseEntity<List<Student>> getAllStudent() {
+        List<Student> studentList = studentService.getAllStudent();
+        return ResponseEntity.ok().body(studentList);
     }
     @PostMapping("/enroll")
     public ResponseEntity<HttpStatus> enrollStudent(@RequestBody StudentDTO studentDTO) {
