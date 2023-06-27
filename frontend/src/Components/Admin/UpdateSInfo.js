@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import Calendar from '../Calendar';
 
 const SIdLayer = styled.div`
@@ -145,7 +146,6 @@ function UpdateSInfo () {
     const [birth, setBirth] = useState(new Date());
     const getBirth = (date) => {
         setBirth(date);
-        console.log(date);
     }
     var btn_name;
     if(type === "search") btn_name = "조회하기";
@@ -155,11 +155,26 @@ function UpdateSInfo () {
     const onSearch = () => {
         //학번 이용해서 정보 조회
         //있을 경우 정보 조회 화면 이동. 없을 경우 에러 메시지
-        setType("view");
+        axios.get("http://localhost:9000/student/get", {
+            params: {sid: sid, name: name}
+        })
+        .then((res) => {
+            console.log(res);
+            setInput(res.data);
+            setSex(res.data.sex);
+            setBirth(res.data.birth);
+            setType("view")
+        })
+        .catch((error) => {
+            console.log(error);
+            alert("존재하지 않는 사용자입니다.")
+        });
     }
     const goUpdate = () => {
-        if(window.confirm("정보를 수정하시겠습니까?"))
+        if(window.confirm("정보를 수정하시겠습니까?")) {
             setType("update");
+        }
+
     }
     const onUpdate = (e) => {
         if(sid === "") alert("학번을 입력하세요.")
@@ -172,9 +187,23 @@ function UpdateSInfo () {
         else if(grade === "") alert("학년을 입력하세요.")
         else {
             if(window.confirm("수정된 정보를 저장하시겠습니까?")) {
-                //정보저장 후 메인으로 이동
-                alert("정보가 수정되었습니다.")
-                setType("view");
+                axios.post("http://localhost:9000/student/update", {
+                    sid : sid,
+                    name : name,
+                    dep : dep,
+                    grade : parseInt(grade),
+                    sex : sex,
+                    phone : phone,
+                    email : email,
+                    addr : addr,
+                    birth : birth
+                })
+                .then(() => {
+                    //정보저장 후 메인으로 이동
+                    alert("정보가 수정되었습니다.")
+                    setType("view");
+                })
+                .catch((error) => {console.log(error)})
             }
         }
     }
@@ -212,7 +241,7 @@ function UpdateSInfo () {
                         <option value="W" key="W">여</option>
                     </Sex>
                     <BirthLayer>생일: </BirthLayer>
-                    <Birth><Calendar getBirth={getBirth} type={type} /></Birth>
+                    <Birth><Calendar date={birth} getBirth={getBirth} type={type} /></Birth>
                     <PhoneLayer>연락처(선택): </PhoneLayer>
                     <Phone name="phone" value={phone} placeholder="연락처 (xxx-xxxx-xxxx 꼴로 입력해주세요)" onChange={onChange} disabled={type==="view" ? true : false} />
                     <EmailLayer>이메일(선택): </EmailLayer>

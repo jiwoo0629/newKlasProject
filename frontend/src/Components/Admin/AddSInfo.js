@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import Calendar from '../Calendar';
 
@@ -125,7 +126,7 @@ const Insert = styled.button`
     border-radius:10px; border:2px solid gray;
 `
 
-function AddSInfo () {
+function AddSInfo (props) {
     const [input, setInput] = useState({
         sid: "", name: "", dep: "", grade: "", phone: "", email: "", addr: ""
     })
@@ -141,7 +142,7 @@ function AddSInfo () {
     const onSelect = (e) => {
         setSex(e.target.value)
     }
-    const onInsert = (e) => {
+    const onInsert = () => {
         if(sid === "") alert("학번을 입력하세요.")
         else if(sid.length !== 10 || isNaN(sid)) alert("잘못된 양식입니다. 학번을 다시 입력하세요.")
         else if(name === "") alert("이름을 입력하세요.")
@@ -153,13 +154,30 @@ function AddSInfo () {
         else {
             if(window.confirm("정보를 저장하시겠습니까?")) {
                 //정보저장 후 메인으로 이동
+                axios.post("http://localhost:9000/student/enroll", {
+                    sid : sid,
+                    name : name,
+                    dep : dep,
+                    grade : parseInt(grade),
+                    sex : sex,
+                    phone : phone,
+                    email : email,
+                    addr : addr,
+                    birth : birth
+                })
+                .then((res) => {
+                    alert("저장이 완료되었습니다.");
+                    console.log(res);
+                    //메인으로 이동
+                    props.getType("main");
+                })
+                .catch((error) => {console.log(error)})
             }
         }
     }
     const [birth, setBirth] = useState(new Date());
     const getBirth = (date) => {
         setBirth(date);
-        console.log(date);
     }
 
     return (
@@ -178,7 +196,7 @@ function AddSInfo () {
                 <option value="W" key="W">여</option>
             </Sex>
             <BirthLayer>생일: </BirthLayer>
-            <Birth><Calendar getBirth={getBirth} /></Birth>
+            <Birth><Calendar date="" getBirth={getBirth} /></Birth>
             <PhoneLayer>연락처(선택): </PhoneLayer>
             <Phone name="phone" value={phone} placeholder="연락처 (xxx-xxxx-xxxx 꼴로 입력해주세요)" onChange={onChange} />
             <EmailLayer>이메일(선택): </EmailLayer>
