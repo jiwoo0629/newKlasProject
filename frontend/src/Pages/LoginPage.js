@@ -4,6 +4,8 @@ import axios from 'axios';
 import styled from 'styled-components';
 import Modal from 'react-modal';
 import background from '../images/login_background.png';
+import FindID from '../Components/Login/FindID';
+import FindPW from '../Components/Login/FindPW';
 
 const Container = styled.div`
     background-image: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)), url(${background});
@@ -70,8 +72,10 @@ const Warning = styled.div`
 `
 
 export default function LoginPage () {
-    const [input, setInput] = useState({ id: "", pw: "" })
-    const {id, pw} = input;
+    const [input, setInput] = useState({
+        id: "", pw: ""
+    })
+    const {id, pw, name, dep} = input;
     const onChange = (e) => {
         const {name, value} = e.target;
         setInput({
@@ -93,45 +97,21 @@ export default function LoginPage () {
             localStorage.setItem("saveID", id)
         }
     }
-    const [IDModalIsOpen, setIDModalIsOpen] = useState(false);
-    const [PWModalIsOpen, setPWModalIsOpen] = useState(false);
+    const [ModalIsOpen, setModalIsOpen] = useState(false);
+    const [IDModal, setIDModal] = useState(false);
+    const [PWModal, setPWModal] = useState(false);
+    const getModalIsOpen = (modal) => {
+        setModalIsOpen(modal);
+    }
     const diffModal = () => {
-        if(IDModalIsOpen && !PWModalIsOpen) {
+        if(IDModal && !PWModal) {
             return (
-                <Modal style={{
-                    overlay: {
-                      position: 'fixed',
-                      top: 0, left: 0, right: 0, bottom: 0,
-                      backgroundColor: 'rgba(255, 255, 255, 0.75)'
-                    },
-                    content: {
-                      position: 'absolute', top: '150px', left: '20%',
-                      width: '1000px', height: '500px',
-                      background: '#fff', borderRadius: '4px', padding: '20px',
-                      overflow: 'auto', outline: 'none'
-                    }
-                }} isOpen={true} onRequestClose={() => setIDModalIsOpen(false)}>
-                    <button onClick={()=> setIDModalIsOpen(false)}>닫기</button>
-                </Modal>
+                <FindID getModalIsOpen={getModalIsOpen} />
             );
         }
-        else if(!IDModalIsOpen && PWModalIsOpen) {
+        else if(!IDModal && PWModal) {
             return (
-                <Modal style={{
-                    overlay: {
-                      position: 'fixed',
-                      top: 0, left: 0, right: 0, bottom: 0,
-                      backgroundColor: 'rgba(255, 255, 255, 0.75)'
-                    },
-                    content: {
-                      position: 'absolute', top: '150px', left: '20%',
-                      width: '1000px', height: '500px',
-                      background: '#fff', borderRadius: '4px', padding: '20px',
-                      overflow: 'auto', outline: 'none'
-                    }
-                }} isOpen={true} onRequestClose={() => setPWModalIsOpen(false)}>
-                    <button onClick={()=> setPWModalIsOpen(false)}>닫기</button>
-                </Modal>
+                <FindPW getModalIsOpen={getModalIsOpen} />
             );
         }
     }
@@ -147,10 +127,34 @@ export default function LoginPage () {
                 <Login onClick={onLogin}>로그인</Login>
             </Div2>
             <Div3>
-                <Find onClick={() => setIDModalIsOpen(true)}>개인번호 찾기</Find>
+                <Find onClick={() => {
+                    setModalIsOpen(true);
+                    setIDModal(true);
+                }}>개인번호 찾기</Find>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <Find onClick={() => setPWModalIsOpen(true)}>비밀번호 찾기</Find>
-                {diffModal()}
+                <Find onClick={() => {
+                    setModalIsOpen(true);
+                    setPWModal(true);
+                }}>비밀번호 찾기</Find>
+                <Modal style={{
+                    overlay: {
+                      position: 'fixed',
+                      top: 0, left: 0, right: 0, bottom: 0,
+                      backgroundColor: 'rgba(255, 255, 255, 0.75)'
+                    },
+                    content: {
+                      position: 'absolute', top: '150px', left: '25%',
+                      width: '800px', height: '500px',
+                      background: '#fff', borderRadius: '4px', padding: '20px',
+                      overflow: 'auto', outline: 'none'
+                    }
+                }} isOpen={ModalIsOpen} onRequestClose={() => {
+                    setModalIsOpen(false);
+                    if(IDModal) setIDModal(false);
+                    if(PWModal) setPWModal(false);
+                }}>
+                    {diffModal()}
+                </Modal>
             </Div3>
             <Warning>
                 * 비밀번호 오류 5회 이상 로그인 제한 *
