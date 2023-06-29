@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AdminPage from './Pages/AdminPage';
 import LoginPage from './Pages/LoginPage';
+import Modal from 'react-modal';
 
 function App() {
   return (
@@ -15,5 +16,6 @@ function App() {
     </div>
   );
 }
+Modal.setAppElement('#root')
 
 export default App;
