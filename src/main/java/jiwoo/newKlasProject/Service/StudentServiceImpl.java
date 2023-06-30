@@ -2,7 +2,9 @@ package jiwoo.newKlasProject.Service;
 
 import jiwoo.newKlasProject.Entity.Student;
 import jiwoo.newKlasProject.DTO.StudentDTO;
+import jiwoo.newKlasProject.Entity.User;
 import jiwoo.newKlasProject.Repository.StudentRepository;
+import jiwoo.newKlasProject.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +14,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
+    private final UserRepository userRepository;
     @Override
-    public Student getStudent(String sid, String name) {
+    public Student findByIdName(String sid, String name) {
         Student student = studentRepository.findBySidName(sid, name)
                 .orElseThrow(() -> new IllegalArgumentException("NO_DATA"));
+        return student;
+    }
+    @Override
+    public Student findByNameDep(String name, String dep) {
+        String id = studentRepository.findByNameDep(name, dep);
+        if(id == null) return null;
+        Student student = studentRepository.findByUser_Id(id);
         return student;
     }
     @Override
@@ -29,6 +39,12 @@ public class StudentServiceImpl implements StudentService {
     public void enrollStudent(StudentDTO studentDTO) {
         if(studentRepository.findBySid(studentDTO.getSid()).isPresent())
             throw new IllegalArgumentException("ALREADY_EXIST");
+        User user = User.builder()
+                .id(studentDTO.getSid())
+                .password("00000000")
+                .role("stud")
+                .build();
+        userRepository.save(user);
         Student student = Student.builder()
                 .sid(studentDTO.getSid())
                 .name(studentDTO.getName())

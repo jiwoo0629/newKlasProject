@@ -8,7 +8,8 @@ import java.util.List;
 
 @Component
 public interface StudentService {
-    Student getStudent(String sid, String name);
+    Student findByIdName(String sid, String name);
+    Student findByNameDep(String name, String dep);
     List<Student> getAllStudent();
     void enrollStudent(StudentDTO studentDTO);
     void updateStudent(StudentDTO studentDTO);

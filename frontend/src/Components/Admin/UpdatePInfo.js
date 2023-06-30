@@ -143,7 +143,7 @@ function UpdatePInfo () {
     const onSearch = () => {
         //학번 이용해서 정보 조회
         //있을 경우 정보 조회 화면 이동. 없을 경우 에러 메시지
-        axios.get("http://localhost:9000/professor/get", {
+        axios.get("http://localhost:9000/professor/findByIdName", {
             params: {pid: pid, name: name}
         })
         .then((res) => {

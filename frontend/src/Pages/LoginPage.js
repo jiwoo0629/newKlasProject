@@ -6,6 +6,7 @@ import Modal from 'react-modal';
 import background from '../images/login_background.png';
 import FindID from '../Components/Login/FindID';
 import FindPW from '../Components/Login/FindPW';
+import ChangePW from '../Components/Login/ChangePW';
 
 const Container = styled.div`
     background-image: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)), url(${background});
@@ -63,10 +64,17 @@ const Find = styled.button`
     background:gray; font-size:18px; font-weight:600; color:white;
     display:flex; justify-content:center; align-items:center;
 `
+const ChangePw = styled.button`
+    position:absolute; top:60px;
+    width:300px; height:40px;
+    border:0px; border-radius:5px;
+    background:gray; font-size:18px; font-weight:600; color:white;
+    display:flex; justify-content:center; align-items:center;
+`
 
 const Warning = styled.div`
-    position:absolute; left:40%; top: 400px;
-    width:300px; height:50px;
+    position:absolute; left:37%; top: 460px;
+    width:400px; height:50px;
     display:flex; justify-content: center; align-items: center;
     background: white; color: red; font-size: 16px; font-weight:600px;
 `
@@ -100,18 +108,25 @@ export default function LoginPage () {
     const [ModalIsOpen, setModalIsOpen] = useState(false);
     const [IDModal, setIDModal] = useState(false);
     const [PWModal, setPWModal] = useState(false);
-    const getModalIsOpen = (modal) => {
-        setModalIsOpen(modal);
-    }
+    const [ChangePWModal, setChangePWModal] = useState(false);
+    const getModalIsOpen = (modal) => { setModalIsOpen(modal); }
+    const getIDModal = (modal) => { setIDModal(modal); }
+    const getPWModal = (modal) => { setPWModal(modal); }
+    const getChangePWModal = (modal) => { setChangePWModal(modal); }
     const diffModal = () => {
-        if(IDModal && !PWModal) {
+        if(IDModal) {
             return (
-                <FindID getModalIsOpen={getModalIsOpen} />
+                <FindID getModalIsOpen={getModalIsOpen} getIDModal={getIDModal} />
             );
         }
-        else if(!IDModal && PWModal) {
+        else if(PWModal) {
             return (
-                <FindPW getModalIsOpen={getModalIsOpen} />
+                <FindPW getModalIsOpen={getModalIsOpen} getPWModal={getPWModal} />
+            );
+        }
+        else if(ChangePWModal) {
+            return (
+                <ChangePW getModalIsOpen={getModalIsOpen} getChangePWModal={getChangePWModal} />
             );
         }
     }
@@ -136,6 +151,10 @@ export default function LoginPage () {
                     setModalIsOpen(true);
                     setPWModal(true);
                 }}>비밀번호 찾기</Find>
+                <ChangePw onClick={() => {
+                    setModalIsOpen(true);
+                    setChangePWModal(true);
+                }}>비밀번호 최초등록</ChangePw>
                 <Modal style={{
                     overlay: {
                       position: 'fixed',
@@ -151,13 +170,15 @@ export default function LoginPage () {
                 }} isOpen={ModalIsOpen} onRequestClose={() => {
                     setModalIsOpen(false);
                     if(IDModal) setIDModal(false);
-                    if(PWModal) setPWModal(false);
+                    else if(PWModal) setPWModal(false);
+                    else if(ChangePWModal) setChangePWModal(false);
                 }}>
                     {diffModal()}
                 </Modal>
             </Div3>
             <Warning>
-                * 비밀번호 오류 5회 이상 로그인 제한 *
+                * 비밀번호 오류 5회 이상 로그인 제한 <br />
+                * 최초 로그인 시, 비밀번호 최초등록을 먼저 해주세요
             </Warning>
         </Container>
     );

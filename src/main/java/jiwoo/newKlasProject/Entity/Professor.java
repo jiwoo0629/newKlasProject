@@ -7,13 +7,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-@Builder
 @Entity
 @Getter
 @NoArgsConstructor
 @Table(name="professor")
 public class Professor {
-    @Id
+    @Id @Column(name="pid")
     private String pid;
     @Column(nullable = false)
     private String name;
@@ -29,6 +28,11 @@ public class Professor {
     private String email;
     @Column
     private LocalDate birth;
+    @OneToOne
+    @JoinColumn(name="pid", referencedColumnName = "id")
+    private User user;
+
+    @Builder
     public Professor(String pid, String name, String dep, String lab, char sex, String phone, String email, LocalDate birth) {
         this.pid = pid;
         this.name = name;
@@ -39,7 +43,6 @@ public class Professor {
         this.email = email;
         this.birth = birth;
     }
-
     public void update(ProfessorDTO professorDTO) {
         this.pid = professorDTO.getPid();
         this.name = professorDTO.getName();

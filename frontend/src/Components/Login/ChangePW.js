@@ -10,12 +10,12 @@ const Close = styled.button`
     border:2px solid black; border-radius:5px;
 `
 
-export default function FindPW (props) {
+export default function ChangePW (props) {
     return (
         <>
             <Close onClick={() => {
                 props.getModalIsOpen(false);
-                props.getPWModal(false);
+                props.getChangePWModal(false);
             }}>X 닫기</Close>
         </>
     );

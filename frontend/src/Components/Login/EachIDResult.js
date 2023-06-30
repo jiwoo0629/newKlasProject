@@ -27,7 +27,7 @@ const Id = styled.div`
 `
 
 export default function EachIDResult (props) {
-    const role = (props.role === "stu") ? "학생" : "교수";
+    const role = (props.role === "stud") ? "학생" : "교수";
     const sex = (props.sex === "M") ? "남" : "여";
     return (
         <Layer>

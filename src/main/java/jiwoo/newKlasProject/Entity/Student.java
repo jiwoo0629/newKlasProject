@@ -1,9 +1,6 @@
 package jiwoo.newKlasProject.Entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jiwoo.newKlasProject.DTO.StudentDTO;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,13 +8,12 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@Builder
 @Entity
 @Getter
 @NoArgsConstructor
 @Table(name="student")
 public class Student {
-    @Id
+    @Id @Column(name="sid")
     private String sid;
     @Column(nullable = false)
     private String name;
@@ -35,6 +31,11 @@ public class Student {
     private String email;
     @Column
     private String addr;
+    @OneToOne
+    @JoinColumn(name="sid", referencedColumnName="id")
+    private User user;
+
+    @Builder
     public Student(String sid, String name, String dep, int grade, char sex, LocalDate birth, String phone, String email, String addr) {
         this.sid = sid;
         this.name = name;

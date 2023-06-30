@@ -4,6 +4,7 @@ import jiwoo.newKlasProject.DTO.StudentDTO;
 import jiwoo.newKlasProject.Entity.Student;
 import jiwoo.newKlasProject.Service.StudentService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +16,14 @@ import java.util.List;
 @RequestMapping("/student")
 public class StudentController {
     private final StudentService studentService;
-    @GetMapping("/get")
-    public ResponseEntity<Student> getStudent(@RequestParam("sid") String sid, @RequestParam("name") String name) {
-        Student student = studentService.getStudent(sid, name);
+    @GetMapping("/findByIdName")
+    public ResponseEntity<Student> findByIdName(@RequestParam("sid") String sid, @RequestParam("name") String name) {
+        Student student = studentService.findByIdName(sid, name);
+        return ResponseEntity.ok().body(student);
+    }
+    @GetMapping("/findByNameDep")
+    public ResponseEntity<?> findByNameDep(@RequestParam("name") String name, @RequestParam("dep") String dep) {
+        Student student = studentService.findByNameDep(name, dep);
         return ResponseEntity.ok().body(student);
     }
     @GetMapping("/getAll")
