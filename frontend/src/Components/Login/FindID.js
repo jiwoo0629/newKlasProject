@@ -102,11 +102,6 @@ const SearchResult2 = styled.div`
     display: grid; flex-direction: row;
 `
 
-const Data = [
-    {role: "stu", dep: "컴퓨터정보공학부", sex: "M", id: "2018202061"},
-    {role: "pro", dep: "컴퓨터정보공학부", sex: "M", id: "12345678"},
-];
-
 export default function FindID (props) {
     const [data, setData] = useState([]);
     const [input, setInput] = useState({
@@ -121,13 +116,34 @@ export default function FindID (props) {
         });
     }
     const onSearch = () => {
+        axios
+        .all([
+            axios.get("http://localhost:9000/student/findByNameDep", {
+                params: {name : in_name, dep : in_dep}
+            }),
+            axios.get("http://localhost:9000/professor/findByNameDep", {
+                params: {name : in_name, dep : in_dep}
+            })
+        ])
+        .then(
+            axios.spread((res1, res2) => {
+                const data1 = res1.data;
+                const data2 = res2.data;
+                const res = [];
+                if(data1 !== "") res.push(data1);
+                if(data2 !== "") res.push(data2);
+                console.log(res);
+                setData(res);
+            })
+        )
+        .catch((error) => {console.log(error)});
         //검색 버튼 누르면 해당 정보 이용해서 정보 탐색해 data 리스트에 담을 수 있게 하기.
     }
-    const EachResult = Data.map((data) => (
-        <EachIDResult role={data.role} dep={data.dep} sex={data.sex} id={data.id} />
+    const EachResult = data.map((data) => (
+        <EachIDResult role={data.user.role} dep={data.dep} sex={data.sex} id={data.user.id} />
     ));
     const diffResult = () => {
-        if(Data.length === 0) {
+        if(data.length === 0) {
             return (
                 <SearchResult1>
                     조회된 정보가 없습니다. <br />
@@ -146,8 +162,11 @@ export default function FindID (props) {
 
     return (
         <>
-            <Upper>개인정보 조회</Upper>
-            <Close onClick={() => props.getModalIsOpen(false)}>X 닫기</Close>
+            <Upper>개인번호 조회</Upper>
+            <Close onClick={() => {
+                props.getModalIsOpen(false);
+                props.getIDModal(false);
+            }}>X 닫기</Close>
             <Caution>
                 ※ 개인번호를 포함한 신분, 학과/부서, 성별 정보 조회 <br />
                 &nbsp;&nbsp; - 이름과 학부를 모두 입력한 후 [검색] 버튼을 클릭하세요. <br />
