@@ -8,6 +8,7 @@ import jiwoo.newKlasProject.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -20,6 +21,12 @@ public class StudentServiceImpl implements StudentService {
         Student student = studentRepository.findBySidName(sid, name)
                 .orElseThrow(() -> new IllegalArgumentException("NO_DATA"));
         return student;
+    }
+    @Override
+    public String findBySidNameBirth(String sid, String name, LocalDate birth) {
+        String id = studentRepository.findBySidNameBirth(sid, name, birth)
+                .orElseThrow(() -> new IllegalArgumentException("NO_DATA"));
+        return id;
     }
     @Override
     public Student findByNameDep(String name, String dep) {
