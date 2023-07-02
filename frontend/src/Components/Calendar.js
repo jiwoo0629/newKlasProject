@@ -12,7 +12,7 @@ const NewDatePicker = styled(DatePicker)`
     display:flex; justify-content:center;
     box-sizing:border-box; width: 200px;
     border: 1px solid gray; border-radius: 4px;
-    font-size:16px; padding: 8px 2px;
+    font-size:16px; padding: 8px 10px;
 `
 
 function Calendar (props) {
