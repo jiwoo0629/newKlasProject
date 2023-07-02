@@ -6,7 +6,6 @@ import Modal from 'react-modal';
 import background from '../images/login_background.png';
 import FindID from '../Components/Login/FindID';
 import FindPW from '../Components/Login/FindPW';
-import ChangePW from '../Components/Login/ChangePW';
 
 const Container = styled.div`
     background-image: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)), url(${background});
@@ -99,7 +98,7 @@ export default function LoginPage () {
     const [fail, setFail] = useState(0);
     const onLogin = () => {
         //로그인 처리
-        //로그인 싶패 시, setFail(fail + 1) / 로그인 성공 시, setFail(0)
+        //로그인 실패 시, setFail(fail + 1) / 로그인 성공 시, setFail(0)
         if(checked === true) {
             if(localStorage.getItem("saveID") !== undefined) localStorage.removeItem("saveId")
             localStorage.setItem("saveID", id)
@@ -121,12 +120,12 @@ export default function LoginPage () {
         }
         else if(PWModal) {
             return (
-                <FindPW getModalIsOpen={getModalIsOpen} getPWModal={getPWModal} />
+                <FindPW getModalIsOpen={getModalIsOpen} getPWModal={getPWModal} title="비밀번호 찾기" />
             );
         }
         else if(ChangePWModal) {
             return (
-                <ChangePW getModalIsOpen={getModalIsOpen} getChangePWModal={getChangePWModal} />
+                <FindPW getModalIsOpen={getModalIsOpen} getPWModal={getChangePWModal} title="비밀번호 최초등록"/>
             );
         }
     }

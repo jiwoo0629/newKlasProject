@@ -111,7 +111,7 @@ export default function FindPW (props) {
     }
     return (
         <>
-            <Upper>비밀번호 찾기</Upper>
+            <Upper>{props.title}</Upper>
             <Close onClick={() => {
                 props.getModalIsOpen(false);
                 props.getPWModal(false);
