@@ -23,6 +23,9 @@ public class User {
         this.password=password;
         this.role=role;
     }
+    public void resetPW() {
+        this.password="00000000";
+    }
     @JsonIgnore @OneToOne(mappedBy="user", fetch=FetchType.LAZY)
     private Student student;
     @JsonIgnore @OneToOne(mappedBy="user", fetch=FetchType.LAZY)
