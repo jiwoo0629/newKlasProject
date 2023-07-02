@@ -4,11 +4,14 @@ import jiwoo.newKlasProject.DTO.StudentDTO;
 import jiwoo.newKlasProject.Entity.Student;
 import jiwoo.newKlasProject.Service.StudentService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.List;
 
 @RestController
@@ -20,6 +23,12 @@ public class StudentController {
     public ResponseEntity<Student> findByIdName(@RequestParam("sid") String sid, @RequestParam("name") String name) {
         Student student = studentService.findByIdName(sid, name);
         return ResponseEntity.ok().body(student);
+    }
+    @GetMapping("/findByIdNameBirth")
+    public ResponseEntity<String> findBySidNameBirth(@RequestParam("sid") String sid, @RequestParam("name") String name, @RequestParam("birth") String birth) {
+        LocalDate date = LocalDate.ofInstant(Instant.parse(birth), ZoneId.of(ZoneOffset.UTC.getId()));
+        String id = studentService.findBySidNameBirth(sid, name, date);
+        return ResponseEntity.ok().body(id);
     }
     @GetMapping("/findByNameDep")
     public ResponseEntity<?> findByNameDep(@RequestParam("name") String name, @RequestParam("dep") String dep) {
