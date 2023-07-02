@@ -79,6 +79,7 @@ const Warning = styled.div`
 `
 
 export default function LoginPage () {
+    const navigate = useNavigate();
     const [input, setInput] = useState({
         id: "", pw: ""
     })
@@ -103,6 +104,7 @@ export default function LoginPage () {
             if(localStorage.getItem("saveID") !== undefined) localStorage.removeItem("saveId")
             localStorage.setItem("saveID", id)
         }
+        navigate('/main');
     }
     const [ModalIsOpen, setModalIsOpen] = useState(false);
     const [IDModal, setIDModal] = useState(false);
@@ -131,10 +133,10 @@ export default function LoginPage () {
     }
     return (
         <Container>
-            <Title>New Klas</Title>
+            <Title>NEW KLAS</Title>
             <Div1>
                 <Input name="id" value={id} placeholder="ID" onChange={onChange} />
-                <Input name="pw" value={pw} placeholder="PASSWORD" onChange={onChange} />
+                <Input type="password" name="pw" value={pw} placeholder="PASSWORD" onChange={onChange} />
             </Div1>
             <Div2>
                 <Checkbox type="checkbox" name="SaveID" value={checked} onClick={onSave}/> &nbsp;&nbsp;아이디 저장
