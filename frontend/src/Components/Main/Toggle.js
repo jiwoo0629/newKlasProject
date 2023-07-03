@@ -6,7 +6,7 @@ const Container = styled.div`
     position:absolute; left:20%; top:70px;
     width:60%; height:300px;
     border:0px; border-top:0px; border-radius:5px; box-shadow: 2px 3px 5px 0px gray;
-    background: white;
+    background: white; z-index:0;
 `
 const CampusLife = styled.div`
     position:absolute; left:3%; top:20px;
