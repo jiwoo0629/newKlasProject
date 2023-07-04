@@ -10,7 +10,7 @@ const Container = styled.div`
     position:fixed; width:100%; height:70px;
     display:flex; justify-content:center; align-items:center;
     background: rgba(32, 201, 151, 0.7); color:white;
-    z-index:0;
+    z-index:1;
 `
 const Logo = styled.button`
     position:absolute; left:240px;

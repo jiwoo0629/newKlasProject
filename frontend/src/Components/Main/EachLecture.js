@@ -36,8 +36,10 @@ const AskAnswer = styled.button`
 export default function EachLecture (props) {
     return (
         <Lecture>
-            <p style={{fontSize:"20px", display:"inline"}}><b>{props.name}</b>({props.lnum})</p>
-            <p style={{fontSize:"15px", color:"gray"}}>{props.pname} / {props.ltime} / {props.lroom}</p>
+            <p style={{fontSize:"20px", display:"inline"}}><b>{props.data.name}</b>({props.data.lnum})</p>
+            <p style={{fontSize:"15px", color:"gray"}}>{props.data.pname} /
+            {props.data.lt1_day} {props.data.lt1_time}교시, {props.data.lt2_day} {props.data.lt2_time} /
+            {props.data.lroom}</p>
             <Announcement>공지사항</Announcement>
             <Reference>강의자료실</Reference>
             <AskAnswer>강의Q&A</AskAnswer>
