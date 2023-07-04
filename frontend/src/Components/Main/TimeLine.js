@@ -28,7 +28,7 @@ const LectureTd = styled.td`
 
 const week = ['일','월','화','수','목','금','토'];
 
-export default function TimeLine () {
+export default function TimeLine (props) {
     return (
         <Timeline>
             <DayTr>
