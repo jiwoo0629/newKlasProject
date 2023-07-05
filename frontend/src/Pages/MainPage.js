@@ -21,13 +21,13 @@ const Schedule_Container = styled.div`
     background:white;
 `
 const Semester = styled.select`
-    position:absolute; top:30px;
+    position:absolute; top:25px;
     width:200px; height:30px;
     border:1px solid black; border-radius:3px;
     padding-left:5px; font-size:18px;
 `
 const Today = styled.div`
-    position:absolute; top:65px;
+    position:absolute; top:60px;
     width:200px;
     display:flex; justify-content:center;
     color:gray; font-size:15px;
