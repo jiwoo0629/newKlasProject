@@ -6,7 +6,6 @@ import Modal from 'react-modal';
 import background from '../images/login_background.png';
 import FindID from '../Components/Login/FindID';
 import FindPW from '../Components/Login/FindPW';
-import ChangePW from '../Components/Login/ChangePW';
 
 const Container = styled.div`
     background-image: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)), url(${background});
@@ -80,6 +79,7 @@ const Warning = styled.div`
 `
 
 export default function LoginPage () {
+    const navigate = useNavigate();
     const [input, setInput] = useState({
         id: "", pw: ""
     })
@@ -99,11 +99,12 @@ export default function LoginPage () {
     const [fail, setFail] = useState(0);
     const onLogin = () => {
         //로그인 처리
-        //로그인 싶패 시, setFail(fail + 1) / 로그인 성공 시, setFail(0)
+        //로그인 실패 시, setFail(fail + 1) / 로그인 성공 시, setFail(0)
         if(checked === true) {
             if(localStorage.getItem("saveID") !== undefined) localStorage.removeItem("saveId")
             localStorage.setItem("saveID", id)
         }
+        navigate('/main');
     }
     const [ModalIsOpen, setModalIsOpen] = useState(false);
     const [IDModal, setIDModal] = useState(false);
@@ -121,21 +122,21 @@ export default function LoginPage () {
         }
         else if(PWModal) {
             return (
-                <FindPW getModalIsOpen={getModalIsOpen} getPWModal={getPWModal} />
+                <FindPW getModalIsOpen={getModalIsOpen} getPWModal={getPWModal} title="비밀번호 찾기" />
             );
         }
         else if(ChangePWModal) {
             return (
-                <ChangePW getModalIsOpen={getModalIsOpen} getChangePWModal={getChangePWModal} />
+                <FindPW getModalIsOpen={getModalIsOpen} getPWModal={getChangePWModal} title="비밀번호 최초등록"/>
             );
         }
     }
     return (
         <Container>
-            <Title>New Klas</Title>
+            <Title>NEW KLAS</Title>
             <Div1>
                 <Input name="id" value={id} placeholder="ID" onChange={onChange} />
-                <Input name="pw" value={pw} placeholder="PASSWORD" onChange={onChange} />
+                <Input type="password" name="pw" value={pw} placeholder="PASSWORD" onChange={onChange} />
             </Div1>
             <Div2>
                 <Checkbox type="checkbox" name="SaveID" value={checked} onClick={onSave}/> &nbsp;&nbsp;아이디 저장
