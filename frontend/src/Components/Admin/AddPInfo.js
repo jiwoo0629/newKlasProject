@@ -134,9 +134,6 @@ function AddPInfo (props) {
         else if(isNaN(pid)) alert("잘못된 양식입니다. 학번을 다시 입력하세요.")
         else if(name === "") alert("이름을 입력하세요.")
         else if(dep === "") alert("학과를 입력하세요.")
-        else if(dep !== "컴퓨터정보공학부") { //학부 리스트에 존재하는지 안하는지 확인
-            alert("존재하지 않는 학과입니다. 학과를 다시 입력하세요.")
-        }
         else if(lab === "") alert("연구실을 입력하세요.")
         else {
             if(window.confirm("정보를 저장하시겠습니까?")) {
