@@ -1,9 +1,7 @@
 package jiwoo.newKlasProject.Entity.Lecture;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import jiwoo.newKlasProject.DTO.Lecture.LectureDTO;
 import lombok.Builder;
 import lombok.Getter;
@@ -67,5 +65,39 @@ public class Lecture {
         this.linfo = lectureDTO.getLinfo();
         this.obj_method = lectureDTO.getObj_method();
     }
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name="lnum")
+    private LectureTime lectureTime;
+
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name="lnum")
+    private LectureEvaluation lectureEvaluation;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name="lnum")
+    private LectureSchedule lectureSchedule;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name="lnum")
+    private LectureAnnouncement lectureAnnouncement;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name="lnum")
+    private LectureReference lectureReference;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name="lnum")
+    private LectureAskAnswer lectureAskAnswer;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name="lnum")
+    private LectureAssignment lectureAssignment;
 
 }
