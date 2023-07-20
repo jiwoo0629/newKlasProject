@@ -2,11 +2,14 @@ package jiwoo.newKlasProject.Entity;
 
 import jakarta.persistence.*;
 import jiwoo.newKlasProject.DTO.StudentDTO;
+import jiwoo.newKlasProject.Entity.Lecture.LectureStudent;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -47,7 +50,6 @@ public class Student {
         this.email = (email.equals("")) ? "" : email;
         this.addr = (addr.equals("")) ? "" : addr;
     }
-
     public void update(StudentDTO studentDTO) {
         this.sid = studentDTO.getSid();
         this.name = studentDTO.getName();
@@ -59,4 +61,7 @@ public class Student {
         this.email = studentDTO.getEmail();
         this.addr = studentDTO.getAddr();
     }
+    @OneToMany(fetch=FetchType.LAZY)
+    @JoinColumn(name="sid_lecturestudent", referencedColumnName="sid")
+    private List<LectureStudent> lectureStudent = new ArrayList<>();
 }

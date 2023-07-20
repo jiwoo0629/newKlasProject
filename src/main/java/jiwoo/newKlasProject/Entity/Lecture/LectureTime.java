@@ -1,6 +1,5 @@
 package jiwoo.newKlasProject.Entity.Lecture;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jiwoo.newKlasProject.DTO.Lecture.LectureTimeDTO;
 import lombok.Builder;
@@ -38,7 +37,6 @@ public class LectureTime {
         this.lt2_day = lectureTimeDTO.getLt2_day();
         this.lt2_time = lectureTimeDTO.getLt2_time();
     }
-    @JsonIgnore
     @OneToOne
     @JoinColumn(name="lnum")
     private Lecture lecture;

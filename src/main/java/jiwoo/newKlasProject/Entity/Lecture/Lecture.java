@@ -67,7 +67,6 @@ public class Lecture {
         this.linfo = lectureDTO.getLinfo();
         this.obj_method = lectureDTO.getObj_method();
     }
-
     @OneToMany(fetch=FetchType.LAZY)
     @JoinColumn(name="lnum_announcement", referencedColumnName = "lnum")
     private List<LectureAnnouncement> announcementList = new ArrayList<>();
@@ -83,6 +82,9 @@ public class Lecture {
     @OneToMany(fetch=FetchType.LAZY)
     @JoinColumn(name="lnum_schedule", referencedColumnName = "lnum")
     private List<LectureSchedule> scheduleList = new ArrayList<>();
+    @OneToMany(fetch=FetchType.LAZY)
+    @JoinColumn(name="lnum_lecturestudent", referencedColumnName="lnum")
+    private List<LectureStudent> lectureStudent = new ArrayList<>();
     @OneToOne(mappedBy="lecture", fetch=FetchType.LAZY)
     private LectureEvaluation lectureEvaluation;
     @OneToOne(mappedBy="lecture", fetch=FetchType.LAZY)

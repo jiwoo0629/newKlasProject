@@ -225,23 +225,22 @@ function AddLInfo (props) {
                 })
                 .then((res) => {
                     console.log(res);
+                    axios.post("http://localhost:9000/lecture/enrollTime", {
+                        lnum : lnum,
+                        lt1_day : lt1_day,
+                        lt1_time : parseInt(lt1_time),
+                        lt2_day : lt2_day,
+                        lt2_time : parseInt(lt2_time)
+                    })
+                    .then((res) => {
+                        alert("저장이 완료되었습니다.");
+                        console.log(res);
+                        //메인으로 이동
+                        props.getType("main");
+                    })
+                    .catch((error) => {console.log(error)});
                 })
                 .catch((error) => {console.log(error)});
-                axios.post("http://localhost:9000/lecture/enrollTime", {
-                    lnum : lnum,
-                    lt1_day : lt1_day,
-                    lt1_time : parseInt(lt1_time),
-                    lt2_day : lt2_day,
-                    lt2_time : parseInt(lt2_time)
-                })
-                .then((res) => {
-                    alert("저장이 완료되었습니다.");
-                    console.log(res);
-                    //메인으로 이동
-                    props.getType("main");
-                })
-                .catch((error) => {console.log(error)});
-
             }
         }
     }

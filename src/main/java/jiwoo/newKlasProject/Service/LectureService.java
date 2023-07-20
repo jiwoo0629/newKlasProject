@@ -10,6 +10,8 @@ import java.util.List;
 public interface LectureService {
     Lecture getLecture(String lnum, String name);
     List<Lecture> getAllLecture();
+    List<LectureStudent> getStudentByLnum(String lnum);
+    List<LectureStudent> getLectureBySid(String sid);
     LectureTime getLectureTime(String lnum);
     LectureEvaluation getLectureEvaluation(String lnum);
     LectureSchedule getLectureSchedule(String lnum);
@@ -24,6 +26,7 @@ public interface LectureService {
     LectureAssignment getLectureAssignment(Long id, String lnum);
     List<LectureAssignment> getAllLectureAssignment(String lnum);
     void enrollLecture(LectureDTO lectureDTO);
+    void enrollStudent(LectureStudentDTO lectureStudentDTO);
     void enrollLectureTime(LectureTimeDTO lectureTimeDTO);
     void enrollLectureEvaluation(String lnum);
     void enrollLectureSchedule(String lnum, int week);
@@ -42,6 +45,7 @@ public interface LectureService {
     void updateLectureAskAnswerComment(LectureAskAnswerCommentDTO lectureAskAnswerCommentDTO);
     void updateLectureAssignment(LectureAssignmentDTO lectureAssignmentDTO);
     void deleteLecture(String lnum);
+    void deleteStudent(String sid, String lnum);
     void deleteLectureAnnouncement(Long id, String lnum);
     void deleteLectureReference(Long id, String lnum);
     void deleteLectureAskAnswer(Long id, String lnum);
