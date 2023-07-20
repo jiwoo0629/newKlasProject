@@ -12,6 +12,7 @@ import java.util.List;
 @Service
 public class LectureServiceImpl implements LectureService{
     private final LectureRepository lectureRepository;
+    private final LectureStudentRepository lectureStudentRepository;
     private final LectureTimeRepository lectureTimeRepository;
     private final LectureEvaluationRepository lectureEvaluationRepository;
     private final LectureScheduleRepository lectureScheduleRepository;
@@ -29,6 +30,18 @@ public class LectureServiceImpl implements LectureService{
     @Override
     public List<Lecture> getAllLecture() {
         List<Lecture> lectureList = lectureRepository.findAll();
+        return lectureList;
+    }
+    @Override
+    public List<LectureStudent> getStudentByLnum(String lnum) {
+        List<LectureStudent> studentList = lectureStudentRepository.findByLnum(lnum)
+                .orElseThrow(() -> new IllegalArgumentException("NO_DATA"));
+        return studentList;
+    }
+    @Override
+    public List<LectureStudent> getLectureBySid(String sid) {
+        List<LectureStudent> lectureList = lectureStudentRepository.findBySid(sid)
+                .orElseThrow(() -> new IllegalArgumentException("NO_DATA"));
         return lectureList;
     }
     @Override
@@ -127,6 +140,18 @@ public class LectureServiceImpl implements LectureService{
                 .obj_method(lectureDTO.getObj_method())
                 .build();
         lectureRepository.save(lecture);
+    }
+    @Override
+    public void enrollStudent(LectureStudentDTO lectureStudentDTO) {
+        if(lectureStudentRepository.findBySidLnum(lectureStudentDTO.getSid(), lectureStudentDTO.getLnum()).isPresent())
+            throw new IllegalArgumentException("ALREADY_EXISTS");
+        LectureStudent lectureStudent = LectureStudent.builder()
+                .sid(lectureStudentDTO.getSid())
+                .lnum(lectureStudentDTO.getLnum())
+                .lyear(lectureStudentDTO.getLyear())
+                .lsemester(lectureStudentDTO.getLsemester())
+                .build();
+        lectureStudentRepository.save(lectureStudent);
     }
     @Override
     public void enrollLectureTime(LectureTimeDTO lectureTimeDTO) {
@@ -287,6 +312,11 @@ public class LectureServiceImpl implements LectureService{
         lectureReferenceRepository.deleteByLnum(lnum);
         lectureAskAnswerRepository.deleteByLnum(lnum);
         lectureAssignmentRepository.deleteByLnum(lnum);
+    }
+    @Override
+    public void deleteStudent(String sid, String lnum) {
+        LectureStudentID lectureStudentID = new LectureStudentID(sid, lnum);
+        lectureStudentRepository.deleteById (lectureStudentID);
     }
     @Override
     public void deleteLectureAnnouncement(Long id, String lnum) {

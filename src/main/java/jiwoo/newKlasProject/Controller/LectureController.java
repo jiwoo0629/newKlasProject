@@ -26,6 +26,16 @@ public class LectureController {
         List<Lecture> lectureList = lectureService.getAllLecture();
         return ResponseEntity.ok().body(lectureList);
     }
+    @GetMapping("/getStudentByLnum")
+    public ResponseEntity<List<LectureStudent>> getStudentByLnum(@RequestParam("lnum") String lnum) {
+        List<LectureStudent> studentList = lectureService.getStudentByLnum(lnum);
+        return ResponseEntity.ok().body(studentList);
+    }
+    @GetMapping("/getLectureBySid")
+    public ResponseEntity<List<LectureStudent>> getLectureBySid(@RequestParam("sid") String sid) {
+        List<LectureStudent> lectureList = lectureService.getLectureBySid(sid);
+        return ResponseEntity.ok().body(lectureList);
+    }
     @GetMapping("/getTime")
     public ResponseEntity<LectureTime> getLectureTime (@RequestParam("lnum") String lnum) {
         LectureTime lectureTime = lectureService.getLectureTime(lnum);
@@ -94,6 +104,11 @@ public class LectureController {
     @PostMapping("/enroll")
     public ResponseEntity<HttpStatus> enrollLecture(@RequestBody LectureDTO lectureDTO) {
         lectureService.enrollLecture(lectureDTO);
+        return ResponseEntity.ok().body(HttpStatus.OK);
+    }
+    @PostMapping("/enrollStudent")
+    public ResponseEntity<HttpStatus> enrollStudent(@RequestBody LectureStudentDTO lectureStudentDTO) {
+        lectureService.enrollStudent(lectureStudentDTO);
         return ResponseEntity.ok().body(HttpStatus.OK);
     }
     @PostMapping("/enrollTime")
@@ -185,6 +200,11 @@ public class LectureController {
     @DeleteMapping("/delete")
     public ResponseEntity<HttpStatus> deleteLecture(@RequestParam("lnum") String lnum) {
         lectureService.deleteLecture(lnum);
+        return ResponseEntity.ok().body(HttpStatus.OK);
+    }
+    @DeleteMapping("/deleteStudent")
+    public ResponseEntity<HttpStatus> deleteStudent(@RequestParam("sid") String sid, @RequestParam("lnum") String lnum) {
+        lectureService.deleteStudent(sid, lnum);
         return ResponseEntity.ok().body(HttpStatus.OK);
     }
     @DeleteMapping("/deleteAnnouncement")

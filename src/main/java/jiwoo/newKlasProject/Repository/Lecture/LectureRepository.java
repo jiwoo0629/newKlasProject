@@ -11,4 +11,6 @@ public interface LectureRepository extends JpaRepository<Lecture, String> {
     Optional<Lecture> findByLnum(@Param("lnum") String lnum);
     @Query("select l from Lecture l where lnum = :lnum and name = :name")
     Optional<Lecture> findByLnumName(@Param("lnum") String lnum, @Param("name") String name);
+
+
 }
