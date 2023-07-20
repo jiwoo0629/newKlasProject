@@ -202,7 +202,7 @@ public class LectureController {
         lectureService.deleteLectureAskAnswer(id, lnum);
         return ResponseEntity.ok().body(HttpStatus.OK);
     }
-    @DeleteMapping("/deleteAskAnswer")
+    @DeleteMapping("/deleteAskAnswerComment")
     public ResponseEntity<HttpStatus> deleteLectureAskAnswerComment(@RequestParam("comid") Long comid, @RequestParam("id") Long id, @RequestParam("lnum") String lnum) {
         lectureService.deleteLectureAskAnswerComment(comid, id, lnum);
         return ResponseEntity.ok().body(HttpStatus.OK);

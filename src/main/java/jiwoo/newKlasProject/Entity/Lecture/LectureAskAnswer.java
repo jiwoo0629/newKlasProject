@@ -9,13 +9,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor
 @Table(name="lecture_askanswer")
 public class LectureAskAnswer {
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
     private String lnum;
@@ -45,10 +47,10 @@ public class LectureAskAnswer {
     }
 
     @JsonIgnore
-    @ManyToOne
+    @OneToMany(fetch=FetchType.LAZY)
     @JoinColumns({
-            @JoinColumn(name="lnum"),
-            @JoinColumn(name="id")
+            @JoinColumn(name="lnum_comment", referencedColumnName = "lnum"),
+            @JoinColumn(name="id_comment", referencedColumnName = "id")
     })
-    private LectureAskAnswerComment lectrureAskAnswerComment;
+    private List<LectureAskAnswerComment> commentList = new ArrayList<>();
 }

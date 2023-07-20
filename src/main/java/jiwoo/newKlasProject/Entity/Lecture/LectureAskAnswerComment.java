@@ -1,9 +1,6 @@
 package jiwoo.newKlasProject.Entity.Lecture;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jiwoo.newKlasProject.DTO.Lecture.LectureAskAnswerCommentDTO;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name="lecture_askanswer_comment")
 public class LectureAskAnswerComment {
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long comid;
     @Column(nullable = false)
     private String lnum;
@@ -44,4 +41,5 @@ public class LectureAskAnswerComment {
         this.writer = lectureAskAnswerCommentDTO.getWriter();
         this.date = lectureAskAnswerCommentDTO.getDate();
     }
+
 }

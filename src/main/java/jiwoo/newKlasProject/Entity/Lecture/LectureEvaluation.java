@@ -1,8 +1,7 @@
 package jiwoo.newKlasProject.Entity.Lecture;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import jiwoo.newKlasProject.DTO.Lecture.LectureEvaluationDTO;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,5 +42,8 @@ public class LectureEvaluation {
         this.attitude = lectureEvaluationDTO.getAttitude();
         this.quiz = lectureEvaluationDTO.getQuiz();
     }
-
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name="lnum")
+    private Lecture lecture;
 }
