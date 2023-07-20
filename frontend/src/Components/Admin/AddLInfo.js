@@ -255,12 +255,12 @@ function AddLInfo (props) {
             <ClassLayer>이수구분: </ClassLayer>
             <Class name="classification" value={classification} onChange={onSelect}>
                 <option value="none" >=== 선 택 ===</option>
-                <option value="MR" key = "MR">전필</option>
-                <option value="MS" key = "MS">전선</option>
-                <option value="LR" key = "LR">교필</option>
-                <option value="LS" key = "LS">교선</option>
-                <option value="BR" key = "BR">기필</option>
-                <option value="BS" key = "BS">기선</option>
+                <option value="MR" key = "MR">전필</option> //Major Required
+                <option value="MS" key = "MS">전선</option> //Major Selective
+                <option value="LR" key = "LR">교필</option> //Liberal Arts Required
+                <option value="LS" key = "LS">교선</option> //Liberal Arts Selective
+                <option value="BR" key = "BR">기필</option> //Basic Required
+                <option value="BS" key = "BS">기선</option> //Basic Selective
             </Class>
             <YearSemesterLayer>년도학기: </YearSemesterLayer>
             <Year name="year" value={year} placeholder="년도" onChange={onChange} />
@@ -271,12 +271,11 @@ function AddLInfo (props) {
             <LtimeLayer>강의시간: </LtimeLayer>
             <Ltime1_Day name="lt1_day" value={lt1_day} placeholder="요일1" onChange={onSelect}>
                 <option value="x">== 선 택 ==</option>
-                <option value="mo">월</option>
-                <option value="tu">화</option>
-                <option value="we">수</option>
-                <option value="th">목</option>
-                <option value="fr">금</option>
-                <option value="sa">토</option>
+                <option value="mon">월</option>
+                <option value="tue">화</option>
+                <option value="wed">수</option>
+                <option value="thu">목</option>
+                <option value="fri">금</option>
             </Ltime1_Day>
             <Ltime1_Time name="lt1_time" value={lt1_time} placeholder="시간1" onChange={onSelect} ref={time1Ref} disabled>
                 <option value="">== 선 택 ==</option>
@@ -291,12 +290,11 @@ function AddLInfo (props) {
             <Ltime2_Day name="lt2_day" value={lt2_day} placeholder="요일2" onChange={onSelect}>
                 <option value="x">== 선 택 ==</option>
                 <option value="no">해당없음</option>
-                <option value="mo">월</option>
-                <option value="tu">화</option>
-                <option value="we">수</option>
-                <option value="th">목</option>
-                <option value="fr">금</option>
-                <option value="sa">토</option>
+                <option value="mon">월</option>
+                <option value="tue">화</option>
+                <option value="wed">수</option>
+                <option value="thu">목</option>
+                <option value="fri">금</option>
             </Ltime2_Day>
             <Ltime2_Time name="lt2_time" value={lt2_time} placeholder="시간2" onChange={onSelect} ref={time2Ref} disabled>
                 <option value="">== 선 택 ==</option>
