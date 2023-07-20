@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LectureReferenceRepository extends JpaRepository<LectureReference, Long> {
+    @Query("select l from LectureReference l where l.id = :id and l.lnum = :lnum")
     Optional<LectureReference> findByIdLnum(@Param("id") Long id, @Param("lnum") String lnum);
     Optional<List<LectureReference>> findAllByLnum(@Param("lnum") String lnum);
     @Query("delete from LectureReference l where l.lnum = :lnum")

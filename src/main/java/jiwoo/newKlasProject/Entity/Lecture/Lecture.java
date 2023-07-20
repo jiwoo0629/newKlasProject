@@ -1,18 +1,20 @@
 package jiwoo.newKlasProject.Entity.Lecture;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jiwoo.newKlasProject.DTO.Lecture.LectureDTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor
 @Table(name="lecture")
 public class Lecture {
-    @Id
+    @Id @Column(name="lnum")
     private String lnum;
     @Column(nullable = false)
     private String name;
@@ -65,39 +67,24 @@ public class Lecture {
         this.linfo = lectureDTO.getLinfo();
         this.obj_method = lectureDTO.getObj_method();
     }
-    @JsonIgnore
-    @OneToOne
-    @JoinColumn(name="lnum")
-    private LectureTime lectureTime;
 
-    @JsonIgnore
-    @OneToOne
-    @JoinColumn(name="lnum")
+    @OneToMany(fetch=FetchType.LAZY)
+    @JoinColumn(name="lnum_announcement", referencedColumnName = "lnum")
+    private List<LectureAnnouncement> announcementList = new ArrayList<>();
+    @OneToMany(fetch=FetchType.LAZY)
+    @JoinColumn(name="lnum_askanswer", referencedColumnName = "lnum")
+    private List<LectureAskAnswer> askAnswerList = new ArrayList<>();
+    @OneToMany(fetch=FetchType.LAZY)
+    @JoinColumn(name="lnum_assignment", referencedColumnName = "lnum")
+    private List<LectureAssignment> assignmentList = new ArrayList<>();
+    @OneToMany(fetch=FetchType.LAZY)
+    @JoinColumn(name="lnum_reference", referencedColumnName = "lnum")
+    private List<LectureReference> referenceList = new ArrayList<>();
+    @OneToMany(fetch=FetchType.LAZY)
+    @JoinColumn(name="lnum_schedule", referencedColumnName = "lnum")
+    private List<LectureSchedule> scheduleList = new ArrayList<>();
+    @OneToOne(mappedBy="lecture", fetch=FetchType.LAZY)
     private LectureEvaluation lectureEvaluation;
-
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name="lnum")
-    private LectureSchedule lectureSchedule;
-
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name="lnum")
-    private LectureAnnouncement lectureAnnouncement;
-
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name="lnum")
-    private LectureReference lectureReference;
-
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name="lnum")
-    private LectureAskAnswer lectureAskAnswer;
-
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name="lnum")
-    private LectureAssignment lectureAssignment;
-
+    @OneToOne(mappedBy="lecture", fetch=FetchType.LAZY)
+    private LectureTime lectureTime;
 }

@@ -1,9 +1,6 @@
 package jiwoo.newKlasProject.Entity.Lecture;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jiwoo.newKlasProject.DTO.Lecture.LectureAnnouncementDTO;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name="lecture_announcement")
 public class LectureAnnouncement {
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
     private String lnum;
@@ -44,4 +41,5 @@ public class LectureAnnouncement {
         this.writer = lectureAnnouncementDTO.getWriter();
         this.date = lectureAnnouncementDTO.getDate();
     }
+
 }
