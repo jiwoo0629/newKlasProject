@@ -1,9 +1,6 @@
 package jiwoo.newKlasProject.Entity.Lecture;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jiwoo.newKlasProject.DTO.Lecture.LectureTimeDTO;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,7 +30,6 @@ public class LectureTime {
         this.lt2_day = lt2_day;
         this.lt2_time = lt2_time;
     }
-
     public void update(LectureTimeDTO lectureTimeDTO) {
         this.lnum = lectureTimeDTO.getLnum();
         this.lt1_day = lectureTimeDTO.getLt1_day();
@@ -41,4 +37,7 @@ public class LectureTime {
         this.lt2_day = lectureTimeDTO.getLt2_day();
         this.lt2_time = lectureTimeDTO.getLt2_time();
     }
+    @OneToOne
+    @JoinColumn(name="lnum")
+    private Lecture lecture;
 }

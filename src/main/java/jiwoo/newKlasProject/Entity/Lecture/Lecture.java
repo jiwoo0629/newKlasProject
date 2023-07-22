@@ -1,20 +1,20 @@
 package jiwoo.newKlasProject.Entity.Lecture;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jiwoo.newKlasProject.DTO.Lecture.LectureDTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor
 @Table(name="lecture")
 public class Lecture {
-    @Id
+    @Id @Column(name="lnum")
     private String lnum;
     @Column(nullable = false)
     private String name;
@@ -67,5 +67,28 @@ public class Lecture {
         this.linfo = lectureDTO.getLinfo();
         this.obj_method = lectureDTO.getObj_method();
     }
-
+    @OneToMany(fetch=FetchType.LAZY)
+    @JoinColumn(name="lnum_announcement", referencedColumnName = "lnum")
+    private List<LectureAnnouncement> announcementList = new ArrayList<>();
+    @OneToMany(fetch=FetchType.LAZY)
+    @JoinColumn(name="lnum_askanswer", referencedColumnName = "lnum")
+    private List<LectureAskAnswer> askAnswerList = new ArrayList<>();
+    @OneToMany(fetch=FetchType.LAZY)
+    @JoinColumn(name="lnum_assignment", referencedColumnName = "lnum")
+    private List<LectureAssignment> assignmentList = new ArrayList<>();
+    @OneToMany(fetch=FetchType.LAZY)
+    @JoinColumn(name="lnum_reference", referencedColumnName = "lnum")
+    private List<LectureReference> referenceList = new ArrayList<>();
+    @OneToMany(fetch=FetchType.LAZY)
+    @JoinColumn(name="lnum_schedule", referencedColumnName = "lnum")
+    private List<LectureSchedule> scheduleList = new ArrayList<>();
+    @OneToMany(fetch=FetchType.LAZY)
+    @JoinColumn(name="lnum_lecturestudent", referencedColumnName="lnum")
+    private List<LectureStudent> lectureStudent = new ArrayList<>();
+    @OneToOne
+    @JoinColumn(name="lnum_evaluation")
+    private LectureEvaluation lectureEvaluation;
+    @OneToOne
+    @JoinColumn(name="lnum_time")
+    private LectureTime lectureTime;
 }
