@@ -85,8 +85,10 @@ public class Lecture {
     @OneToMany(fetch=FetchType.LAZY)
     @JoinColumn(name="lnum_lecturestudent", referencedColumnName="lnum")
     private List<LectureStudent> lectureStudent = new ArrayList<>();
-    @OneToOne(mappedBy="lecture", fetch=FetchType.LAZY)
+    @OneToOne
+    @JoinColumn(name="lnum_evaluation")
     private LectureEvaluation lectureEvaluation;
-    @OneToOne(mappedBy="lecture", fetch=FetchType.LAZY)
+    @OneToOne
+    @JoinColumn(name="lnum_time")
     private LectureTime lectureTime;
 }

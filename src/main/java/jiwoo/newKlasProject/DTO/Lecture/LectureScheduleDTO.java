@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class LectureScheduleDTO {
     private String lnum;
-    private int week;
+    private Long week;
     private String contents;
     private String method;
 }

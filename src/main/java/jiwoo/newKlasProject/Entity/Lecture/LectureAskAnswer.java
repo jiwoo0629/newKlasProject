@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -31,26 +32,26 @@ public class LectureAskAnswer {
     private LocalDateTime date;
 
     @Builder
-    public LectureAskAnswer(String lnum, String title, String contents, String writer, LocalDateTime date) {
+    public LectureAskAnswer(String lnum, String title, String contents, String writer) {
         this.lnum = lnum;
         this.title = title;
         this.contents = contents;
         this.writer = writer;
-        this.date = date;
+        this.date = new java.sql.Timestamp(new Date().getTime()).toLocalDateTime();
     }
     public void update(LectureAskAnswerDTO lectureAskAnswerDTO) {
         this.lnum = lectureAskAnswerDTO.getLnum();
         this.title = lectureAskAnswerDTO.getTitle();
         this.contents = lectureAskAnswerDTO.getContents();
         this.writer = lectureAskAnswerDTO.getWriter();
-        this.date = lectureAskAnswerDTO.getDate();
+        this.date = new java.sql.Timestamp(new Date().getTime()).toLocalDateTime();
     }
 
     @JsonIgnore
     @OneToMany(fetch=FetchType.LAZY)
     @JoinColumns({
-            @JoinColumn(name="lnum_comment", referencedColumnName = "lnum"),
-            @JoinColumn(name="id_comment", referencedColumnName = "id")
+            @JoinColumn(name="lnum", referencedColumnName = "lnum"),
+            @JoinColumn(name="id", referencedColumnName = "id")
     })
     private List<LectureAskAnswerComment> commentList = new ArrayList<>();
 }

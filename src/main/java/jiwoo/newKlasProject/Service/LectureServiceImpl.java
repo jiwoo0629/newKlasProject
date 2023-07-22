@@ -57,8 +57,8 @@ public class LectureServiceImpl implements LectureService{
         return lectureEvaluation;
     }
     @Override
-    public LectureSchedule getLectureSchedule(String lnum) {
-        LectureSchedule lectureSchedule = lectureScheduleRepository.findById(lnum)
+    public List<LectureSchedule> getLectureSchedule(String lnum) {
+        List<LectureSchedule> lectureSchedule = lectureScheduleRepository.findByLnum(lnum)
                 .orElseThrow(() -> new IllegalArgumentException("NO_DATA"));
         return lectureSchedule;
     }
@@ -70,8 +70,7 @@ public class LectureServiceImpl implements LectureService{
     }
     @Override
     public List<LectureAnnouncement> getAllLectureAnnouncement(String lnum) {
-        List<LectureAnnouncement> lectureAnnouncementList = lectureAnnouncementRepository.findAllByLnum(lnum)
-                .orElseThrow(() -> new IllegalArgumentException("NO_DATA"));
+        List<LectureAnnouncement> lectureAnnouncementList = lectureAnnouncementRepository.findAllByLnum(lnum);
         return lectureAnnouncementList;
     }
     @Override
@@ -82,8 +81,7 @@ public class LectureServiceImpl implements LectureService{
     }
     @Override
     public List<LectureReference> getAllLectureReference(String lnum) {
-        List<LectureReference> lectureReferenceList = lectureReferenceRepository.findAllByLnum(lnum)
-                .orElseThrow(() -> new IllegalArgumentException("NO_DATA"));
+        List<LectureReference> lectureReferenceList = lectureReferenceRepository.findAllByLnum(lnum);
         return lectureReferenceList;
     }
     @Override
@@ -94,8 +92,7 @@ public class LectureServiceImpl implements LectureService{
     }
     @Override
     public List<LectureAskAnswer> getAllLectureAskAnswer(String lnum) {
-        List<LectureAskAnswer> lectureAskAnswerList = lectureAskAnswerRepository.findAllByLnum(lnum)
-                .orElseThrow(() -> new IllegalArgumentException("NO_DATA"));
+        List<LectureAskAnswer> lectureAskAnswerList = lectureAskAnswerRepository.findAllByLnum(lnum);
         return lectureAskAnswerList;
     }
     @Override
@@ -106,8 +103,7 @@ public class LectureServiceImpl implements LectureService{
     }
     @Override
     public List<LectureAskAnswerComment> getAllLectureAskAnswerComment(Long id, String lnum) {
-        List<LectureAskAnswerComment> lectureAskAnswerCommentList = lectureAskAnswerCommentRepository.findAllByIdLnum(id, lnum)
-                .orElseThrow(() -> new IllegalArgumentException("NO_DATA"));
+        List<LectureAskAnswerComment> lectureAskAnswerCommentList = lectureAskAnswerCommentRepository.findAllByIdLnum(id, lnum);
         return lectureAskAnswerCommentList;
     }
     @Override
@@ -118,8 +114,7 @@ public class LectureServiceImpl implements LectureService{
     }
     @Override
     public List<LectureAssignment> getAllLectureAssignment(String lnum) {
-        List<LectureAssignment> lectureAssignmentList = lectureAssignmentRepository.findAllByLnum(lnum)
-                .orElseThrow(() -> new IllegalArgumentException("NO_DATA"));
+        List<LectureAssignment> lectureAssignmentList = lectureAssignmentRepository.findAllByLnum(lnum);
         return lectureAssignmentList;
     }
     @Override
@@ -146,10 +141,10 @@ public class LectureServiceImpl implements LectureService{
         if(lectureStudentRepository.findBySidLnum(lectureStudentDTO.getSid(), lectureStudentDTO.getLnum()).isPresent())
             throw new IllegalArgumentException("ALREADY_EXISTS");
         LectureStudent lectureStudent = LectureStudent.builder()
-                .sid(lectureStudentDTO.getSid())
                 .lnum(lectureStudentDTO.getLnum())
                 .lyear(lectureStudentDTO.getLyear())
                 .lsemester(lectureStudentDTO.getLsemester())
+                .sid(lectureStudentDTO.getSid())
                 .build();
         lectureStudentRepository.save(lectureStudent);
     }
@@ -176,8 +171,9 @@ public class LectureServiceImpl implements LectureService{
         lectureEvaluationRepository.save(lectureEvaluation);
     }
     @Override
-    public void enrollLectureSchedule(String lnum, int week) {
-        if(lectureScheduleRepository.findById(lnum).isPresent())
+    public void enrollLectureSchedule(String lnum, Long week) {
+        LectureScheduleID lectureScheduleID = new LectureScheduleID(lnum, week);
+        if(lectureScheduleRepository.findById(lectureScheduleID).isPresent())
             throw new IllegalArgumentException("ALREADY_EXISTS");
         LectureSchedule lectureSchedule = LectureSchedule.builder()
                 .lnum(lnum)
@@ -192,7 +188,6 @@ public class LectureServiceImpl implements LectureService{
                 .title(lectureAnnouncementDTO.getTitle())
                 .contents(lectureAnnouncementDTO.getContents())
                 .writer(lectureAnnouncementDTO.getWriter())
-                .date(lectureAnnouncementDTO.getDate())
                 .build();
         lectureAnnouncementRepository.save(lectureAnnouncement);
     }
@@ -203,7 +198,6 @@ public class LectureServiceImpl implements LectureService{
                 .title(lectureReferenceDTO.getTitle())
                 .contents(lectureReferenceDTO.getContents())
                 .writer(lectureReferenceDTO.getWriter())
-                .date(lectureReferenceDTO.getDate())
                 .build();
         lectureReferenceRepository.save(lectureReference);
     }
@@ -214,7 +208,6 @@ public class LectureServiceImpl implements LectureService{
                 .title(lectureAskAnswerDTO.getTitle())
                 .contents(lectureAskAnswerDTO.getContents())
                 .writer(lectureAskAnswerDTO.getWriter())
-                .date(lectureAskAnswerDTO.getDate())
                 .build();
         lectureAskAnswerRepository.save(lectureAskAnswer);
     }
@@ -225,7 +218,6 @@ public class LectureServiceImpl implements LectureService{
                 .id(lectureAskAnswerCommentDTO.getId())
                 .contents(lectureAskAnswerCommentDTO.getContents())
                 .writer(lectureAskAnswerCommentDTO.getWriter())
-                .date(lectureAskAnswerCommentDTO.getDate())
                 .build();
         lectureAskAnswerCommentRepository.save(lectureAskAnswerComment);
     }
@@ -235,6 +227,7 @@ public class LectureServiceImpl implements LectureService{
                 .lnum(lectureAssignmentDTO.getLnum())
                 .title(lectureAssignmentDTO.getTitle())
                 .contents(lectureAssignmentDTO.getContents())
+                .startdate(lectureAssignmentDTO.getStartdate())
                 .duedate(lectureAssignmentDTO.getDuedate())
                 .build();
         lectureAssignmentRepository.save(lectureAssignment);
@@ -262,42 +255,43 @@ public class LectureServiceImpl implements LectureService{
     }
     @Override
     public void updateLectureSchedule(LectureScheduleDTO lectureScheduleDTO) {
-        LectureSchedule lectureSchedule = lectureScheduleRepository.findById(lectureScheduleDTO.getLnum())
+        LectureScheduleID lectureScheduleID = new LectureScheduleID(lectureScheduleDTO.getLnum(), lectureScheduleDTO.getWeek());
+        LectureSchedule lectureSchedule = lectureScheduleRepository.findById(lectureScheduleID)
                 .orElseThrow(() -> new IllegalArgumentException("NO_DATA"));
         lectureSchedule.update(lectureScheduleDTO);
         lectureScheduleRepository.save(lectureSchedule);
     }
     @Override
-    public void updateLectureAnnouncement(LectureAnnouncementDTO lectureAnnouncementDTO) {
-        LectureAnnouncement lectureAnnouncement = lectureAnnouncementRepository.findByIdLnum(lectureAnnouncementDTO.getId(), lectureAnnouncementDTO.getLnum())
+    public void updateLectureAnnouncement(Long id, LectureAnnouncementDTO lectureAnnouncementDTO) {
+        LectureAnnouncement lectureAnnouncement = lectureAnnouncementRepository.findByIdLnum(id, lectureAnnouncementDTO.getLnum())
                 .orElseThrow(() -> new IllegalArgumentException("NO_DATA"));
         lectureAnnouncement.update(lectureAnnouncementDTO);
         lectureAnnouncementRepository.save(lectureAnnouncement);
     }
     @Override
-    public void updateLectureReference(LectureReferenceDTO lectureReferenceDTO) {
-        LectureReference lectureReference = lectureReferenceRepository.findByIdLnum(lectureReferenceDTO.getId(), lectureReferenceDTO.getLnum())
+    public void updateLectureReference(Long id, LectureReferenceDTO lectureReferenceDTO) {
+        LectureReference lectureReference = lectureReferenceRepository.findByIdLnum(id, lectureReferenceDTO.getLnum())
                 .orElseThrow(() -> new IllegalArgumentException("NO_DATA"));
         lectureReference.update(lectureReferenceDTO);
         lectureReferenceRepository.save(lectureReference);
     }
     @Override
-    public void updateLectureAskAnswer(LectureAskAnswerDTO lectureAskAnswerDTO) {
-        LectureAskAnswer lectureAskAnswer = lectureAskAnswerRepository.findByIdLnum(lectureAskAnswerDTO.getId(), lectureAskAnswerDTO.getLnum())
+    public void updateLectureAskAnswer(Long id, LectureAskAnswerDTO lectureAskAnswerDTO) {
+        LectureAskAnswer lectureAskAnswer = lectureAskAnswerRepository.findByIdLnum(id, lectureAskAnswerDTO.getLnum())
                 .orElseThrow(() -> new IllegalArgumentException("NO_DATA"));
         lectureAskAnswer.update(lectureAskAnswerDTO);
         lectureAskAnswerRepository.save(lectureAskAnswer);
     }
     @Override
-    public void updateLectureAskAnswerComment(LectureAskAnswerCommentDTO lectureAskAnswerCommentDTO) {
-        LectureAskAnswerComment lectureAskAnswerComment = lectureAskAnswerCommentRepository.findByComidIdLnum(lectureAskAnswerCommentDTO.getComid(), lectureAskAnswerCommentDTO.getId(), lectureAskAnswerCommentDTO.getLnum())
+    public void updateLectureAskAnswerComment(Long comid, LectureAskAnswerCommentDTO lectureAskAnswerCommentDTO) {
+        LectureAskAnswerComment lectureAskAnswerComment = lectureAskAnswerCommentRepository.findByComidIdLnum(comid, lectureAskAnswerCommentDTO.getId(), lectureAskAnswerCommentDTO.getLnum())
                 .orElseThrow(() -> new IllegalArgumentException("NO_DATA"));
         lectureAskAnswerComment.update(lectureAskAnswerCommentDTO);
         lectureAskAnswerCommentRepository.save(lectureAskAnswerComment);
     }
     @Override
-    public void updateLectureAssignment(LectureAssignmentDTO lectureAssignmentDTO) {
-        LectureAssignment lectureAssignment = lectureAssignmentRepository.findByIdLnum(lectureAssignmentDTO.getId(), lectureAssignmentDTO.getLnum())
+    public void updateLectureAssignment(Long id, LectureAssignmentDTO lectureAssignmentDTO) {
+        LectureAssignment lectureAssignment = lectureAssignmentRepository.findByIdLnum(id, lectureAssignmentDTO.getLnum())
                 .orElseThrow(() -> new IllegalArgumentException("NO_DATA"));
         lectureAssignment.update(lectureAssignmentDTO);
         lectureAssignmentRepository.save(lectureAssignment);
@@ -305,13 +299,14 @@ public class LectureServiceImpl implements LectureService{
     @Override
     public void deleteLecture(String lnum) {
         lectureRepository.deleteById(lnum);
+        /*
         lectureTimeRepository.deleteById(lnum);
         lectureEvaluationRepository.deleteById(lnum);
-        lectureScheduleRepository.deleteById(lnum);
         lectureAnnouncementRepository.deleteByLnum(lnum);
         lectureReferenceRepository.deleteByLnum(lnum);
         lectureAskAnswerRepository.deleteByLnum(lnum);
         lectureAssignmentRepository.deleteByLnum(lnum);
+        */
     }
     @Override
     public void deleteStudent(String sid, String lnum) {
@@ -320,22 +315,32 @@ public class LectureServiceImpl implements LectureService{
     }
     @Override
     public void deleteLectureAnnouncement(Long id, String lnum) {
-        lectureAnnouncementRepository.deleteByIdLnum(id, lnum);
+        LectureAnnouncement lectureAnnouncement = lectureAnnouncementRepository.findByIdLnum(id, lnum)
+                        .orElseThrow(() -> new IllegalArgumentException("NO DATA"));
+        lectureAnnouncementRepository.delete(lectureAnnouncement);
     }
     @Override
     public void deleteLectureReference(Long id, String lnum) {
-        lectureReferenceRepository.deleteByIdLnum(id, lnum);
+        LectureReference lectureReference = lectureReferenceRepository.findByIdLnum(id, lnum)
+                        .orElseThrow(() -> new IllegalArgumentException("NO DATA"));
+        lectureReferenceRepository.delete(lectureReference);
     }
     @Override
     public void deleteLectureAskAnswer(Long id, String lnum) {
-        lectureAskAnswerRepository.deleteByIdLnum(id, lnum);
+        LectureAskAnswer lectureAskAnswer = lectureAskAnswerRepository.findByIdLnum(id, lnum)
+                        .orElseThrow(() -> new IllegalArgumentException("NO DATA"));
+        lectureAskAnswerRepository.delete(lectureAskAnswer);
     }
     @Override
     public void deleteLectureAskAnswerComment(Long comid, Long id, String lnum) {
-        lectureAskAnswerCommentRepository.deleteByComidIdLnum(comid, id, lnum);
+        LectureAskAnswerComment lectureAskAnswerComment = lectureAskAnswerCommentRepository.findByComidIdLnum(comid, id, lnum)
+                        .orElseThrow(() -> new IllegalArgumentException("NO DATA"));
+        lectureAskAnswerCommentRepository.delete(lectureAskAnswerComment);
     }
     @Override
     public void deleteLectureAssignment(Long id, String lnum) {
-        lectureAssignmentRepository.deleteByIdLnum(id, lnum);
+        LectureAssignment lectureAssignment = lectureAssignmentRepository.findByIdLnum(id, lnum)
+                        .orElseThrow(() -> new IllegalArgumentException("NO DATA"));
+        lectureAssignmentRepository.delete(lectureAssignment);
     }
 }

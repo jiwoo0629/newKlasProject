@@ -12,10 +12,6 @@ public interface LectureAskAnswerCommentRepository extends JpaRepository<Lecture
     @Query("select l from LectureAskAnswerComment l where l.comid = :comid and l.id = :id and l.lnum = :lnum")
     Optional<LectureAskAnswerComment> findByComidIdLnum(@Param("comid") Long comid, @Param("id") Long id, @Param("lnum") String lnum);
     @Query("select l from LectureAskAnswerComment l where l.id = :id and l.lnum = :lnum")
-    Optional<List<LectureAskAnswerComment>> findAllByIdLnum(@Param("id") Long id, @Param("lnum") String lnum);
-    @Query("delete from LectureAskAnswerComment l where l.id = :id and l.lnum = :lnum")
-    void deleteByIdLnum(@Param("lnum") String lnum);
-    @Query("delete from LectureAskAnswerComment l where l.comid = :comid and l.id = :id and l.lnum = :lnum")
-    void deleteByComidIdLnum(@Param("comid") Long comid, @Param("id") Long id, @Param("lnum") String lnum);
+    List<LectureAskAnswerComment> findAllByIdLnum(@Param("id") Long id, @Param("lnum") String lnum);
 
 }

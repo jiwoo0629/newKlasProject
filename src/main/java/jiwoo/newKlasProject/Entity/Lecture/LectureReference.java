@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -27,19 +28,19 @@ public class LectureReference {
     private LocalDateTime date;
 
     @Builder
-    public LectureReference(String lnum, String title, String contents, String writer, LocalDateTime date) {
+    public LectureReference(String lnum, String title, String contents, String writer) {
         this.lnum = lnum;
         this.title = title;
         this.contents = contents;
         this.writer = writer;
-        this.date = date;
+        this.date = new java.sql.Timestamp(new Date().getTime()).toLocalDateTime();
     }
     public void update(LectureReferenceDTO lectureReferenceDTO) {
         this.lnum = lectureReferenceDTO.getLnum();
         this.title = lectureReferenceDTO.getTitle();
         this.contents = lectureReferenceDTO.getContents();
         this.writer = lectureReferenceDTO.getWriter();
-        this.date = lectureReferenceDTO.getDate();
+        this.date = new java.sql.Timestamp(new Date().getTime()).toLocalDateTime();
     }
 
 }

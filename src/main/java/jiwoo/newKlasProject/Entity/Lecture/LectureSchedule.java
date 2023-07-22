@@ -6,21 +6,24 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Entity
 @Getter
 @NoArgsConstructor
 @Table(name="lecture_schedule")
-public class LectureSchedule {
+@IdClass(LectureScheduleID.class)
+public class LectureSchedule implements Serializable {
     @Id
     private String lnum;
-    @Column
-    private int week;
+    @Id
+    private Long week;
     @Column
     private String contents;
     @Column
     private String method;
     @Builder
-    public LectureSchedule(String lnum, int week) {
+    public LectureSchedule(String lnum, Long week) {
         this.lnum = lnum;
         this.week = week;
     }
@@ -30,5 +33,4 @@ public class LectureSchedule {
         this.contents = lectureScheduleDTO.getContents();
         this.method = lectureScheduleDTO.getMethod();
     }
-
 }

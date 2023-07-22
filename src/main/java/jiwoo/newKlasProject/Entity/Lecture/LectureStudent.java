@@ -22,10 +22,10 @@ public class LectureStudent implements Serializable {
     @Column(nullable=false)
     private int lsemester;
     @Builder
-    public LectureStudent(String sid, String lnum, int lyear, int lsemester) {
-        this.sid = sid;
+    public LectureStudent(String lnum, int lyear, int lsemester, String sid) {
         this.lnum = lnum;
         this.lyear = lyear;
         this.lsemester = lsemester;
+        this.sid = sid;
     }
 }
