@@ -16,5 +16,6 @@ public class LectureAssignmentDTO {
     private String lnum;
     private String title;
     private String contents;
+    private LocalDateTime startdate;
     private LocalDateTime duedate;
 }

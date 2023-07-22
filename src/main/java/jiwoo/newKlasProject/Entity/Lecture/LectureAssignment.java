@@ -22,19 +22,23 @@ public class LectureAssignment {
     @Column(nullable = false)
     private String contents;
     @Column(nullable = false)
+    private LocalDateTime startdate;
+    @Column(nullable = false)
     private LocalDateTime duedate;
 
     @Builder
-    public LectureAssignment(String lnum, String title, String contents, LocalDateTime duedate) {
+    public LectureAssignment(String lnum, String title, String contents, LocalDateTime startdate, LocalDateTime duedate) {
         this.lnum = lnum;
         this.title = title;
         this.contents = contents;
+        this.startdate = startdate;
         this.duedate = duedate;
     }
     public void update(LectureAssignmentDTO lectureAssignmentDTO) {
         this.lnum = lectureAssignmentDTO.getLnum();
         this.title = lectureAssignmentDTO.getTitle();
         this.contents = lectureAssignmentDTO.getContents();
+        this.startdate = lectureAssignmentDTO.getStartdate();
         this.duedate = lectureAssignmentDTO.getDuedate();
     }
 

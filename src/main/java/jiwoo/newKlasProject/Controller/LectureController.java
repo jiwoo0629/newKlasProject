@@ -47,8 +47,8 @@ public class LectureController {
         return ResponseEntity.ok().body(lectureEvaluation);
     }
     @GetMapping("/getSchedule")
-    public ResponseEntity<LectureSchedule> getLectureSchedule (@RequestParam("lnum") String lnum) {
-        LectureSchedule lectureSchedule = lectureService.getLectureSchedule(lnum);
+    public ResponseEntity<List<LectureSchedule>> getLectureSchedule (@RequestParam("lnum") String lnum) {
+        List<LectureSchedule> lectureSchedule = lectureService.getLectureSchedule(lnum);
         return ResponseEntity.ok().body(lectureSchedule);
     }
     @GetMapping("/getAnnouncement")
@@ -124,7 +124,7 @@ public class LectureController {
     @PostMapping("/enrollSchedule")
     public ResponseEntity<HttpStatus> enrollLectureSchedule(@RequestParam String lnum) {
         for(int i=1; i<16; i++)
-            lectureService.enrollLectureSchedule(lnum, i);
+            lectureService.enrollLectureSchedule(lnum, Long.valueOf(i));
         return ResponseEntity.ok().body(HttpStatus.OK);
     }
     @PostMapping("/enrollAnnouncement")
@@ -168,33 +168,36 @@ public class LectureController {
         return ResponseEntity.ok().body(HttpStatus.OK);
     }
     @PostMapping("/updateSchedule")
-    public ResponseEntity<HttpStatus> updateLectureSchedule(@RequestBody LectureScheduleDTO lectureScheduleDTO) {
-        lectureService.updateLectureSchedule(lectureScheduleDTO);
+    public ResponseEntity<HttpStatus> updateLectureSchedule(@RequestBody LectureScheduleDTO[] params) {
+        for(int i=0; i<15; i++) {
+            LectureScheduleDTO lectureScheduleDTO = params[i];
+            lectureService.updateLectureSchedule(lectureScheduleDTO);
+        }
         return ResponseEntity.ok().body(HttpStatus.OK);
     }
     @PostMapping("/updateAnnouncement")
-    public ResponseEntity<HttpStatus> updateLectureAnnouncement(@RequestBody LectureAnnouncementDTO lectureAnnouncementDTO) {
-        lectureService.updateLectureAnnouncement(lectureAnnouncementDTO);
+    public ResponseEntity<HttpStatus> updateLectureAnnouncement(@RequestParam("id") Long id, @RequestBody LectureAnnouncementDTO lectureAnnouncementDTO) {
+        lectureService.updateLectureAnnouncement(id, lectureAnnouncementDTO);
         return ResponseEntity.ok().body(HttpStatus.OK);
     }
     @PostMapping("/updateReference")
-    public ResponseEntity<HttpStatus> updateLectureReference(@RequestBody LectureReferenceDTO lectureReferenceDTO) {
-        lectureService.updateLectureReference(lectureReferenceDTO);
+    public ResponseEntity<HttpStatus> updateLectureReference(@RequestParam("id") Long id, @RequestBody LectureReferenceDTO lectureReferenceDTO) {
+        lectureService.updateLectureReference(id, lectureReferenceDTO);
         return ResponseEntity.ok().body(HttpStatus.OK);
     }
     @PostMapping("/updateAskAnswer")
-    public ResponseEntity<HttpStatus> updateLectureAskAnswer(@RequestBody LectureAskAnswerDTO lectureAskAnswerDTO) {
-        lectureService.updateLectureAskAnswer(lectureAskAnswerDTO);
+    public ResponseEntity<HttpStatus> updateLectureAskAnswer(@RequestParam("id") Long id, @RequestBody LectureAskAnswerDTO lectureAskAnswerDTO) {
+        lectureService.updateLectureAskAnswer(id, lectureAskAnswerDTO);
         return ResponseEntity.ok().body(HttpStatus.OK);
     }
     @PostMapping("/updateAskAnswerComment")
-    public ResponseEntity<HttpStatus> updateLectureAskAnswerComment(@RequestBody LectureAskAnswerCommentDTO lectureAskAnswerCommentDTO) {
-        lectureService.updateLectureAskAnswerComment(lectureAskAnswerCommentDTO);
+    public ResponseEntity<HttpStatus> updateLectureAskAnswerComment(@RequestParam("comid") Long comid, @RequestBody LectureAskAnswerCommentDTO lectureAskAnswerCommentDTO) {
+        lectureService.updateLectureAskAnswerComment(comid, lectureAskAnswerCommentDTO);
         return ResponseEntity.ok().body(HttpStatus.OK);
     }
     @PostMapping("/updateAssignment")
-    public ResponseEntity<HttpStatus> updateLectureAssignment(@RequestBody LectureAssignmentDTO lectureAssignmentDTO) {
-        lectureService.updateLectureAssignment(lectureAssignmentDTO);
+    public ResponseEntity<HttpStatus> updateLectureAssignment(@RequestParam("id") Long id, @RequestBody LectureAssignmentDTO lectureAssignmentDTO) {
+        lectureService.updateLectureAssignment(id, lectureAssignmentDTO);
         return ResponseEntity.ok().body(HttpStatus.OK);
     }
     @DeleteMapping("/delete")

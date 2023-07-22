@@ -14,7 +14,7 @@ public interface LectureService {
     List<LectureStudent> getLectureBySid(String sid);
     LectureTime getLectureTime(String lnum);
     LectureEvaluation getLectureEvaluation(String lnum);
-    LectureSchedule getLectureSchedule(String lnum);
+    List<LectureSchedule> getLectureSchedule(String lnum);
     LectureAnnouncement getLectureAnnouncement(Long id, String lnum);
     List<LectureAnnouncement> getAllLectureAnnouncement(String lnum);
     LectureReference getLectureReference(Long id, String lnum);
@@ -29,7 +29,7 @@ public interface LectureService {
     void enrollStudent(LectureStudentDTO lectureStudentDTO);
     void enrollLectureTime(LectureTimeDTO lectureTimeDTO);
     void enrollLectureEvaluation(String lnum);
-    void enrollLectureSchedule(String lnum, int week);
+    void enrollLectureSchedule(String lnum, Long week);
     void enrollLectureAnnouncement(LectureAnnouncementDTO lectureAnnouncementDTO);
     void enrollLectureReference(LectureReferenceDTO lectureReferenceDTO);
     void enrollLectureAskAnswer(LectureAskAnswerDTO lectureAskAnswerDTO);
@@ -39,11 +39,11 @@ public interface LectureService {
     void updateLectureTime(LectureTimeDTO lectureTimeDTO);
     void updateLectureEvaluation(LectureEvaluationDTO lectureEvaluationDTO);
     void updateLectureSchedule(LectureScheduleDTO lectureScheduleDTO);
-    void updateLectureAnnouncement(LectureAnnouncementDTO lectureAnnouncementDTO);
-    void updateLectureReference(LectureReferenceDTO lectureReferenceDTO);
-    void updateLectureAskAnswer(LectureAskAnswerDTO lectureAskAnswerDTO);
-    void updateLectureAskAnswerComment(LectureAskAnswerCommentDTO lectureAskAnswerCommentDTO);
-    void updateLectureAssignment(LectureAssignmentDTO lectureAssignmentDTO);
+    void updateLectureAnnouncement(Long id, LectureAnnouncementDTO lectureAnnouncementDTO);
+    void updateLectureReference(Long id, LectureReferenceDTO lectureReferenceDTO);
+    void updateLectureAskAnswer(Long id, LectureAskAnswerDTO lectureAskAnswerDTO);
+    void updateLectureAskAnswerComment(Long comid, LectureAskAnswerCommentDTO lectureAskAnswerCommentDTO);
+    void updateLectureAssignment(Long id, LectureAssignmentDTO lectureAssignmentDTO);
     void deleteLecture(String lnum);
     void deleteStudent(String sid, String lnum);
     void deleteLectureAnnouncement(Long id, String lnum);

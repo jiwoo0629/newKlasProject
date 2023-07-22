@@ -41,7 +41,5 @@ public class LectureEvaluation {
         this.attitude = lectureEvaluationDTO.getAttitude();
         this.quiz = lectureEvaluationDTO.getQuiz();
     }
-    @OneToOne
-    @JoinColumn(name="lnum")
-    private Lecture lecture;
+
 }

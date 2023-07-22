@@ -11,9 +11,5 @@ import java.util.Optional;
 public interface LectureAskAnswerRepository extends JpaRepository<LectureAskAnswer, Long> {
     @Query("select l from LectureAskAnswer l where l.id = :id and l.lnum = :lnum")
     Optional<LectureAskAnswer> findByIdLnum(@Param("id") Long id, @Param("lnum") String lnum);
-    Optional<List<LectureAskAnswer>> findAllByLnum(@Param("lnum") String lnum);
-    @Query("delete from LectureAskAnswer l where l.lnum = :lnum")
-    void deleteByLnum(@Param("lnum") String lnum);
-    @Query("delete from LectureAskAnswer l where l.id = :id and l.lnum = :lnum")
-    void deleteByIdLnum(@Param("id") Long id, @Param("lnum") String lnum);
+    List<LectureAskAnswer> findAllByLnum(@Param("lnum") String lnum);
 }

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -27,19 +28,19 @@ public class LectureAskAnswerComment {
     private LocalDateTime date;
 
     @Builder
-    public LectureAskAnswerComment(String lnum, Long id, String contents, String writer, LocalDateTime date) {
+    public LectureAskAnswerComment(String lnum, Long id, String contents, String writer) {
         this.lnum = lnum;
         this.id = id;
         this.contents = contents;
         this.writer = writer;
-        this.date = date;
+        this.date = new java.sql.Timestamp(new Date().getTime()).toLocalDateTime();
     }
     public void update(LectureAskAnswerCommentDTO lectureAskAnswerCommentDTO) {
         this.lnum = lectureAskAnswerCommentDTO.getLnum();
         this.id = lectureAskAnswerCommentDTO.getId();
         this.contents = lectureAskAnswerCommentDTO.getContents();
         this.writer = lectureAskAnswerCommentDTO.getWriter();
-        this.date = lectureAskAnswerCommentDTO.getDate();
+        this.date = new java.sql.Timestamp(new Date().getTime()).toLocalDateTime();
     }
 
 }
